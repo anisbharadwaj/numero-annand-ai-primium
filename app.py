@@ -13,7 +13,7 @@ app.secret_key = "numero-annand-ai-secure-key"
 # DATABASE INITIALIZATION (To prevent fraud and save addresses)
 # =========================================================
 def init_db():
-    conn = sqlite3.connect('orders.db')
+    conn = sqlite3.connect('/tem/orders.db')
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS orders (
