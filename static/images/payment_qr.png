@@ -1,3 +1,0 @@
-<img src="{{ url_for('static', filename='images/payment_qr.png') }}"
-     alt="UPI QR Code"
-     width="300">
