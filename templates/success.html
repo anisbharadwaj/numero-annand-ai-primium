@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="py-5 text-center">
+    <div class="container max-w-600 animate__animated animate__zoomIn">
+        <div class="glass-card p-5">
+            <div class="fs-1 text-success mb-3">✓</div>
+            <h1 class="fw-bold text-gradient mb-3">Order Registered Successfully</h1>
+            <p class="text-muted mb-4">Your processing parameters have been successfully queued for ledger audit inspection.</p>
+            
+            <div class="text-start bg-black-20 p-4 rounded mb-4 text-white-50 border border-secondary">
+                <div class="mb-2"><strong>Order ID Reference:</strong> #{{ order.id }}</div>
+                <div class="mb-2"><strong>Applicant Identity:</strong> {{ order.name }}</div>
+                <div class="mb-2"><strong>Selected Asset:</strong> {{ order.report_type }}</div>
+                <div class="mb-2"><strong>UTR Filed:</strong> {{ order.utr }}</div>
+                <div><strong>Current Audit Status:</strong> <span class="badge bg-warning text-dark">{{ order.payment_status }}</span></div>
+            </div>
+
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-light rounded-pill px-5">Return Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
