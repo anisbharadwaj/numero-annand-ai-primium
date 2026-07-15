@@ -1,75 +1,89 @@
-import base64
-from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_required
+import os
+import random
+import string
+from datetime import datetime
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from werkzeug.utils import secure_filename
 from app import db
 from app.models import Order
 
 payments_bp = Blueprint('payments', __name__)
 
-@payments_bp.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    package = request.args.get('package', 'digital')
-    amount = 201 if package == 'digital' else 501
-    report_type = "Digital PDF Report" if package == 'digital' else "Printed Premium Report"
+def generate_reference():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+
+@payments_bp.route('/checkout/<string:plan_type>', methods=['GET', 'POST'])
+def checkout_route(plan_type):
+    # Enforce clear business rules pricing models upfront
+    if plan_type == 'printed':
+        amount = 501
+        report_label = "Premium Printed Report"
+    else:
+        plan_type = 'digital'
+        amount = 201
+        report_label = "Digital PDF Report"
 
     if request.method == 'POST':
-        # File parsing to base64
-        screenshot_file = request.files.get('screenshot')
-        screenshot_b64 = ""
-        if screenshot_file and screenshot_file.filename != '':
-            screenshot_b64 = base64.b64encode(screenshot_file.read()).decode('utf-8')
-
-        new_order = Order(
-            name=request.form.get('name'),
-            dob=request.form.get('dob'),
-            birth_time=request.form.get('birth_time'),
-            birth_place=request.form.get('birth_place'),
-            mobile=request.form.get('mobile'),
-            email=request.form.get('email'),
-            gender=request.form.get('gender'),
-            language=request.form.get('language'),
-            report_type=request.form.get('report_type'),
-            address=request.form.get('address', ''),
-            amount=int(request.form.get('amount')),
-            utr=request.form.get('utr'),
-            screenshot_base64=screenshot_b64,
-            payment_status='Pending'
-        )
         try:
+            # Server-Side structural binding parsing
+            dob_str = request.form.get('dob')
+            dob_date = datetime.strptime(dob_str, '%Y-%m-%d').date()
+            
+            ref = generate_reference()
+            new_order = Order(
+                order_ref=ref,
+                name=request.form.get('name'),
+                dob=dob_date,
+                birth_time=request.form.get('birth_time'),
+                birth_place=request.form.get('birth_place'),
+                mobile=request.form.get('mobile'),
+                email=request.form.get('email'),
+                gender=request.form.get('gender'),
+                language=request.form.get('language'),
+                report_type=plan_type,
+                address=request.form.get('address', ''),
+                amount=amount,
+                payment_status='PENDING'
+            )
             db.session.add(new_order)
             db.session.commit()
-            return redirect(url_for('payments.success', order_id=new_order.id))
+            return redirect(url_for('payments.payment_gateway_route', order_ref=ref))
         except Exception as e:
             db.session.rollback()
-            flash('Error creating application request. Double check if UTR was used before.', 'danger')
+            flash("Error creating profile mapping. Ensure all input constraints match.", "danger")
+            
+    return render_template('checkout.html', plan_type=plan_type, amount=amount, report_label=report_label)
 
-    return render_template('checkout.html', amount=amount, report_type=report_type)
-
-@payments_bp.route('/payment')
-def payment_screen():
-    amount = request.args.get('amount', '201')
-    return render_template('payment.html', amount=amount)
-
-@payments_bp.route('/success/<int:order_id>')
-def success(order_id):
-    order = Order.query.get_or_404(order_id)
-    return render_template('success.html', order=order)
-
-@payments_bp.route('/dashboard')
-@login_required
-def dashboard():
-    orders = Order.query.order_by(Order.created_at.desc()).all()
-    return render_template('dashboard.html', orders=orders)
-
-@payments_bp.route('/verify/<int:order_id>/<string:status>')
-@login_required
-def verify_payment(order_id, status):
-    if status not in ['Verified', 'Rejected']:
-        flash('Invalid status assignment.', 'danger')
-        return redirect(url_for('payments.dashboard'))
+@payments_bp.route('/pay/<string:order_ref>', methods=['GET', 'POST'])
+def payment_gateway_route(order_ref):
+    order = Order.query.filter_by(order_ref=order_ref).first_or_404()
+    
+    if request.method == 'POST':
+        utr = request.form.get('utr')
+        file = request.files.get('screenshot')
         
-    order = Order.query.get_or_404(order_id)
-    order.payment_status = status
-    db.session.commit()
-    flash(f'Order ID #{order.id} status modified to {status} successfully.', 'success')
-    return redirect(url_for('payments.dashboard'))
+        if not utr or len(utr) < 6:
+            flash("Please enter a valid Transaction UTR reference ID.", "warning")
+            return render_template('payment.html', order=order)
+            
+        filename = None
+        if file and allowed_file(file.filename):
+            sec_filename = secure_filename(file.filename)
+            filename = f"{order.order_ref}_{sec_filename}"
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            
+        order.utr = utr
+        order.screenshot = filename
+        db.session.commit()
+        
+        return redirect(url_for('payments.success_route', order_ref=order.order_ref))
+        
+    return render_template('payment.html', order=order)
+
+@payments_bp.route('/success/<string:order_ref>')
+def success_route(order_ref):
+    order = Order.query.filter_by(order_ref=order_ref).first_or_404()
+    return render_template('success.html', order=order)
