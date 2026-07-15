@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="py-5">
+    <div class="container max-w-800">
+        <div class="glass-card p-4 p-md-5 animate__animated animate__fadeInUp">
+            <h2 class="fw-bold text-gradient text-center mb-4">Order Details Input</h2>
+            <div class="alert bg-black-20 border border-secondary text-center text-white-50 mb-4">
+                Selected Asset Variant: <strong>{{ report_type }} (₹{{ amount }})</strong>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('payments.checkout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="amount" value="{{ amount }}">
+                <input type="hidden" name="report_type" value="{{ report_type }}">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Full Identity Name</label>
+                        <input type="text" name="name" class="form-control bg-transparent text-white border-secondary" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Date of Birth</label>
+                        <input type="date" name="dob" class="form-control bg-transparent text-white border-secondary" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Birth Time</label>
+                        <input type="time" name="birth_time" class="form-control bg-transparent text-white border-secondary" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Birth Place</label>
+                        <input type="text" name="birth_place" class="form-control bg-transparent text-white border-secondary" placeholder="City, State" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Mobile Number</label>
+                        <input type="tel" name="mobile" class="form-control bg-transparent text-white border-secondary" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Email Address</label>
+                        <input type="email" name="email" class="form-control bg-transparent text-white border-secondary" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Gender</label>
+                        <select name="gender" class="form-select bg-dark text-white border-secondary" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Language Variant</label>
+                        <select name="language" class="form-select bg-dark text-white border-secondary" required>
+                            <option value="English">English</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="Assamese">Assamese</option>
+                        </select>
+                    </div>
+
+                    {% if amount == 501 %}
+                    <div class="col-12 animate__animated animate__fadeIn">
+                        <label class="form-label text-muted">Full Shipping Address (Include PIN Code)</label>
+                        <textarea name="address" class="form-control bg-transparent text-white border-secondary" rows="3" required></textarea>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <hr class="border-secondary my-5">
+                
+                <h4 class="text-center text-gradient fw-bold mb-4">UPI QR Settlement Matrix</h4>
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('api.generate_upi_qr', amount=amount) }}" alt="Dynamic Execution QR Structure" class="img-fluid rounded border p-2 bg-white" style="max-height: 250px;">
+                    <p class="text-muted mt-2 small">Scan using PhonePe, GPay, Paytm, or any BHIM Banking App.<br><strong>Payee: Ananda Sarmah</strong></p>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">UTR / Transaction ID (12 Digits Reference)</label>
+                        <input type="text" name="utr" class="form-control bg-transparent text-white border-secondary" pattern="\d{12}" title="Must be a valid 12-digit transaction number" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Upload Remittance Screenshot</label>
+                        <input type="file" name="screenshot" class="form-control bg-transparent text-white border-secondary" accept="image/*" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 mt-5 rounded-pill shadow">Complete Request Placement</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
