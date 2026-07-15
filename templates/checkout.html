@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Numero Annand AI Premium - Complete Purchase Gateway</title>
     
-    <!-- Bootstrap 5 and Core CSS Frameworks -->
+    <!-- UI Layout Vector Core Packages -->
     <link href="https://jsdelivr.net" rel="stylesheet">
     <link href="https://jsdelivr.net" rel="stylesheet">
     <link href="https://cloudflare.com" rel="stylesheet">
     
-    <!-- Premium Dark Glassmorphism Structural Design Styling -->
+    <!-- Premium Dark Glassmorphism Styling Sheet Configuration -->
     <style>
         :root {
             --bg-dark: #0a0e1a;
@@ -75,29 +75,30 @@
             color: #ffffff !important;
         }
 
-        /* High-Contrast White Background Wrapper to isolate original QR colors cleanly */
-        .qr-display-card {
+        /* Solid White Canvas Wrapper Frame to ensure perfect phone-camera scanning contrast balance */
+        .qr-canvas-holder {
             background-color: #ffffff !important;
-            padding: 1rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
             display: inline-block;
-            max-width: 260px;
+            max-width: 250px;
             width: 100%;
         }
 
-        .qr-display-card img {
+        .qr-canvas-holder img {
             display: block;
             width: 100%;
             height: auto;
             mix-blend-mode: normal !important;
-            filter: none !important; /* Disables page dark filters from corrupting original QR pixels */
+            /* Inverts your black settings image to standard dark pixels on a white grid layout dynamically */
+            filter: invert(1) contrast(1.2) brightness(0.95) !important;
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Header -->
+    <!-- Responsive Navigation Header -->
     <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
@@ -107,7 +108,7 @@
         </div>
     </nav>
 
-    <!-- Content Workspace -->
+    <!-- Content Gateway Workspace -->
     <div class="container my-5">
         <div class="row g-4 justify-content-center">
             <div class="col-lg-10 col-xl-9 col-sm-12">
@@ -117,13 +118,13 @@
                     <p class="text-white-50">Unlock your fully personalized, beautifully formatted extensive master blueprint edition.</p>
                 </div>
 
-                <!-- Main Form Pipeline Ingestion Routing -->
+                <!-- Database Form Pipeline Integration -->
                 <form method="POST" action="/create-order" enctype="multipart/form-data" class="needs-validation" novalidate>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined }}"/>
 
                     <div class="row g-4">
                         
-                        <!-- Left Data Intake Column Block -->
+                        <!-- Left Data Intake Fields Form Group -->
                         <div class="col-md-6 col-sm-12">
                             <div class="glass-card p-4 rounded-4 h-100">
                                 <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Workspace Menu</h5>
@@ -155,7 +156,7 @@
                                     </select>
                                 </div>
 
-                                <!-- Hidden context parameters mapping back to prevent database structural record crashes -->
+                                <!-- Hidden form parameter fallbacks to avoid schema validation errors -->
                                 <input type="hidden" name="email" value="customer@numeroannand.ai">
                                 <input type="hidden" name="gender" value="Male">
                                 <input type="hidden" name="birth_time" value="12:00">
@@ -163,7 +164,7 @@
                             </div>
                         </div>
 
-                        <!-- Right Panel: Dynamic Pricing Tier Options Menus -->
+                        <!-- Right Panel: Core Pricing and Image Pipeline Rendering Area -->
                         <div class="col-md-6 col-sm-12">
                             <div class="glass-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between">
                                 
@@ -172,7 +173,7 @@
                                     
                                     <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 mb-3">
                                         <div class="form-check">
-                                            <input class="form-check-input border-secondary" type="radio" name="report_tier_selector" id="tierDigital" value="digital" checked onclick="togglePricingTier('digital', 201)">
+                                            <input class="form-check-input border-secondary cursor-pointer" type="radio" name="report_tier_selector" id="tierDigital" value="digital" checked onclick="togglePricingTier('digital', 201)">
                                             <label class="form-check-label fw-bold cursor-pointer text-white" for="tierDigital">
                                                 Download Full Digital PDF Version (Instant AI) — <span class="text-gold">₹201</span>
                                             </label>
