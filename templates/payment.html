@@ -1,22 +1,164 @@
 {% extends 'base.html' %}
+
+{% block title %}UPI Payment Settlement - Numero Annand AI Premium{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center py-4">
-    <div class="col-md-6 glass-panel p-4 text-center">
-        <h3 class="text-gradient-gold mb-3">Dynamic UPI Clearing Engine</h3>
-        <p class="text-muted small">Scan via any authorized interface app (BHIM, GooglePay, PhonePe, Paytm)</p>
+<div class="row justify-content-center animate__animated animate__fadeIn">
+    <div class="col-lg-6 col-md-10 col-sm-12">
         
-        <div class="bg-white p-3 d-inline-block rounded-4 my-3 shadow-lg">
-            <!-- Intercepts dynamic endpoint built by python backend library on runtime -->
-            <img src="{{ url_for('api.generate_upi_qr', order_ref=order.order_ref) }}" alt="Dynamic Execution Token Code" class="img-fluid" style="max-width: 250px;">
-        </div>
-        
-        <div class="my-2 text-white font-monospace border border-secondary p-2 rounded bg-dark small">
-            Amount Due: <strong>₹{{ order.amount }}.00</strong><br>
-            Reference Allocation Token: <strong>{{ order.order_ref }}</strong>
+        <!-- Order Stage Progress Breadcrumb -->
+        <div class="d-flex justify-content-between align-items-center mb-4 px-3 text-white-50 small font-monospace">
+            <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> 1. Form Details</span>
+            <span class="text-success">➔</span>
+            <span class="text-primary fw-bold"><i class="bi bi-2-circle-fill me-1"></i> 2. UPI Payment</span>
+            <span class="text-muted">➔</span>
+            <span><i class="bi bi-3-circle me-1"></i> 3. Complete</span>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="text-start mt-4 border-top border-secondary pt-3">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <div class="mb-3">
-                <label class="form-label text-muted small">Enter 12-Digit Bank UTR / Transaction ID Reference</label>
-                <input type="text" name="utr" class="form-control custom-input font-monospace"
+        <div class="glass-card p-4 p-md-5 rounded-4 shadow-lg border border-white border-opacity-10 text-white text-center">
+            
+            <h3 class="fw-bold tracking-tight mb-2">Scan Secure UPI QR</h3>
+            <p class="text-white-50 small mb-4">Complete your payment of <span class="text-gold fw-bold fs-5">₹{{ order.amount }}</span> safely using any banking app.</p>
+
+            <!-- Dynamic QR Code Canvas Injection Box Wrapper -->
+            <div class="position-relative d-inline-block bg-white p-3 rounded-4 mb-4 shadow-lg animate__animated animate__zoomIn animate__delay-1s" style="min-width: 240px; min-height: 240px;">
+                <div id="qrLoadingSpinner" class="position-absolute top-50 start-50 translate-middle text-dark">
+                    <div class="spinner-border spinner-border-sm" role="status"></div>
+                </div>
+                <!-- This injects the crisp Segno engine base64 vector securely via AJAX directly -->
+                <img id="dynamicQrImage" src="" alt="Secure Payment QR Canvas" class="img-fluid rounded-2 d-none" style="width: 220px; height: 220px;">
+            </div>
+
+            <!-- Alternative Copyable Gateway VPA Container Row Element -->
+            <div class="p-3 bg-white bg-opacity-5 rounded-3 mb-4 border border-white border-opacity-5 text-start">
+                <label class="form-label text-white-50 small fw-bold tracking-wider text-uppercase font-monospace mb-1">Official Merchant UPI Account</label>
+                <div class="input-group">
+                    <input type="text" class="form-control bg-transparent text-white border-secondary font-monospace text-gold small" id="upiVpaString" value="7099805039@ybl" readonly>
+                    <button class="btn btn-outline-secondary border-secondary text-white-50" type="button" id="copyVpaButton" onclick="copyUpiVpaText()">
+                        <i class="bi bi-copy" id="copyIcon"></i>
+                    </button>
+                </div>
+                <div class="d-flex justify-content-between mt-2 text-white-50" style="font-size: 0.72rem;">
+                    <span>Payee: <strong>Ananda Sarmah</strong></span>
+                    <span>Note: <strong>Numero Annand AI Premium</strong></span>
+                </div>
+            </div>
+
+            <!-- Verification Ingestion Form Gateway Interface -->
+            <form method="POST" action="{{ url_for('payments.submit_proof', order_id=order.id) }}" enctype="multipart/form-data" class="needs-validation text-start mt-4" novalidate>
+                <!-- CSRF Verification Security Anchor Frame Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Bank UTR/Transaction Reference Field Input Element Box -->
+                <div class="mb-4">
+                    <label for="utr" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">12-Digit Bank UTR / Transaction ID</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-white-50 border-secondary"><i class="bi bi-hash"></i></span>
+                        <input type="text" class="form-control bg-transparent border-start-0 text-white border-secondary focus-ring ps-0 font-monospace" id="utr" name="utr" placeholder="e.g., 6192xxxxxxxx" pattern="[0-9]{12}" minlength="12" maxlength="12" required autocomplete="off">
+                        <div class="invalid-feedback">Enter the precise 12-digit numeric banking transaction reference code.</div>
+                    </div>
+                </div>
+
+                <!-- Screenshot Attachment Input Vector File Field Block -->
+                <div class="mb-4">
+                    <label for="screenshot" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Upload Payment Proof Screenshot</label>
+                    <input type="file" class="form-control bg-transparent text-white border-secondary focus-ring" id="screenshot" name="screenshot" accept="image/*" required>
+                    <div class="invalid-feedback">Please upload a valid JPEG/PNG snapshot clear payment reference proof.</div>
+                </div>
+
+                <!-- Submission Validation CTA Button Link Element -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-gold btn-lg py-3 fw-bold rounded-3 transition-all d-flex align-items-center justify-content-center gap-2 shadow">
+                        <span>Submit Verification Request</span>
+                        <i class="bi bi-cloud-arrow-up-fill"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        background-color: rgba(255,255,255,0.04) !important;
+        border-color: var(--bs-primary) !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.22) !important;
+    }
+    .input-group:focus-within .input-group-text {
+        border-color: var(--bs-primary) !important;
+        color: var(--bs-primary) !important;
+    }
+    input[type="file"]::file-selector-button {
+        background-color: rgba(255, 255, 255, 0.08);
+        color: white;
+        border: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 0.375rem 0.75rem;
+        margin-right: 0.75rem;
+        transition: background-color 0.2s ease;
+    }
+    input[type="file"]::file-selector-button:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+</style>
+
+<script>
+    // Pure AJAX engine to dynamically fetch the custom backend compliant UPI code
+    document.addEventListener("DOMContentLoaded", function() {
+        const targetAmount = "{{ order.amount }}";
+        const qrImgElement = document.getElementById('dynamicQrImage');
+        const spinnerElement = document.getElementById('qrLoadingSpinner');
+
+        fetch(`/api/qr?amount=${targetAmount}`)
+            .then(response => response.json())
+            .then(res => {
+                if(res.status === 'success' && res.data.qr_image_base64) {
+                    qrImgElement.src = res.data.qr_image_base64;
+                    qrImgElement.classList.remove('d-none');
+                    spinnerElement.classList.add('d-none');
+                } else {
+                    handleQrGenerationFallback();
+                }
+            })
+            .catch(err => {
+                handleQrGenerationFallback();
+            });
+    });
+
+    function handleQrGenerationFallback() {
+        document.getElementById('qrLoadingSpinner').innerHTML = '<span class="text-danger small fw-bold px-2">QR Load Failed. Please copy VPA string manually.</span>';
+    }
+
+    function copyUpiVpaText() {
+        const copyText = document.getElementById("upiVpaString");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+
+        const copyIcon = document.getElementById("copyIcon");
+        copyIcon.classList.remove('bi-copy');
+        copyIcon.classList.add('bi-check2', 'text-success');
+
+        setTimeout(() => {
+            copyIcon.classList.remove('bi-check2', 'text-success');
+            copyIcon.classList.add('bi-copy');
+        }, 2000);
+    }
+
+    // Client-side execution loop validation standard triggers
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
