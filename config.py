@@ -1,26 +1,11 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file (development)
-load_dotenv()
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
-    """Centralized configuration."""
-    SECRET_KEY = os.getenv('SECRET_KEY', 'change-me')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///app.db')
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'default-super-secret-key-1234')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(basedir, 'instance', 'numero_annand.db'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    # Vercel API integration
-    VERCEL_TOKEN = os.getenv('VERCEL_TOKEN')
-    VERCEL_PROJECT = os.getenv('VERCEL_PROJECT')  # project ID or name
-    VERCEL_TEAM = os.getenv('VERCEL_TEAM')        # (optional) Team ID
-
-    # Auth and session security
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    REMEMBER_COOKIE_DURATION = 86400  # seconds
-
-    # CSRF protection (Flask-WTF uses SECRET_KEY)
-    WTF_CSRF_ENABLED = True
-
-    # Other security headers can be set via Flask-Talisman if desired
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB upload limit
