@@ -1,100 +1,141 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}Enter Birth Details - Numero Annand AI Premium{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="row g-5">
-        <div class="col-lg-7">
-            <div class="glass-card p-4">
-                <h3 class="text-gold mb-4">Step 1: Complete Cosmic Geometry Information Matrix</h3>
-                <form action="{{ url_for('main.process_checkout') }}" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="report_type" value="{{ report_type }}">
-                    
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control" required placeholder="John Doe">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Date of Birth</label>
-                            <input type="date" name="dob" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Exact Birth Time</label>
-                            <input type="time" name="birth_time" class="form-control" required>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Birth Place (City, State, Country)</label>
-                            <input type="text" name="birth_place" class="form-control" required placeholder="Guwahati, Assam, India">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Mobile WhatsApp Contact</label>
-                            <input type="tel" name="mobile" class="form-control" required placeholder="9876543210">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Email Delivery Address</label>
-                            <input type="email" name="email" class="form-control" required placeholder="name@domain.com">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Gender Alignment</label>
-                            <select name="gender" class="form-select" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Preferred Report Language</label>
-                            <select name="language" class="form-select" required>
-                                <option value="English">English</option>
-                                <option value="Hindi">Hindi</option>
-                                <option value="Assamese">Assamese</option>
-                            </select>
-                        </div>
-                        
-                        {% if report_type == 'printed' %}
-                        <div class="col-md-12">
-                            <label class="form-label">Complete Shipping Postal Address</label>
-                            <textarea name="address" class="form-control" rows="3" required placeholder="Enter full address with PIN code where physical ledger should be mailed..."></textarea>
-                        </div>
-                        {% endif %}
+<div class="row justify-content-center animate__animated animate__fadeIn">
+    <div class="col-lg-8 col-md-11 col-sm-12">
+        
+        <!-- Order Stage Indicator Breadcrumb Vector -->
+        <div class="d-flex justify-content-between align-items-center mb-4 px-3 text-white-50 small font-monospace">
+            <span class="text-primary fw-bold"><i class="bi bi-1-circle-fill me-1"></i> 1. Form Details</span>
+            <span class="text-muted">➔</span>
+            <span><i class="bi bi-2-circle me-1"></i> 2. UPI Payment</span>
+            <span class="text-muted">➔</span>
+            <span><i class="bi bi-3-circle me-1"></i> 3. Complete</span>
+        </div>
 
-                        <h3 class="text-gold mt-4 mb-2">Step 2: Submit Instant UPI Payment</h3>
-                        <p class="text-muted small">Scan the dynamic ledger invoice to the right with any UPI app (GPay, PhonePe, Paytm). Complete exactly the transaction requirement, paste your transaction numeric reference string down below, and attach a screenshot proof for real-time audit processing.</p>
+        <div class="glass-card p-4 p-md-5 rounded-4 shadow-lg border border-white border-opacity-10 text-white">
+            <h2 class="fw-bold tracking-tight mb-2">Configure Your Chart Matrix</h2>
+            <p class="text-white-50 small mb-4">Please submit precise chronological information below to optimize calculation algorithms.</p>
+            
+            <form method="POST" action="{{ url_for('payments.create_order') }}" class="needs-validation" novalidate>
+                <!-- CSRF Protection Vector Token Injection -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold text-warning">Transaction Reference Number (UTR / Ref No.)</label>
-                            <input type="text" name="utr" class="form-control border-warning" required placeholder="12-digit numeric value matching transaction receipt">
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Attach Verification Screenshot Receipt File</label>
-                            <input type="file" name="screenshot" class="form-control" accept="image/*" required>
-                        </div>
-                        
-                        <div class="col-md-12 mt-4">
-                            <button type="submit" class="btn btn-gold w-100 py-3 fs-5 fw-bold">Submit Completed Record Request Ledger</button>
+                <!-- Selection Summary Card Block -->
+                <div class="p-3 bg-white bg-opacity-5 rounded-3 mb-4 border border-white border-opacity-5 d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-white-50 small d-block font-monospace uppercase text-uppercase">Selected Package</span>
+                        <h5 class="fw-bold m-0 text-gold" id="tierDisplay">Digital PDF Chart</h5>
+                    </div>
+                    <div class="text-end">
+                        <span class="text-white-50 small d-block font-monospace uppercase text-uppercase">Total Cost</span>
+                        <h4 class="fw-black m-0 text-white" id="amountDisplay">₹201</h4>
+                    </div>
+                </div>
+
+                <!-- Hidden Input Form Hooks mapping variables seamlessly into post methods -->
+                <input type="hidden" name="report_type" id="report_type_input" value="digital">
+                <input type="hidden" name="amount" id="amount_input" value="201">
+
+                <div class="row g-4">
+                    <!-- Name Field Form Row Layout Element -->
+                    <div class="col-md-6 col-sm-12">
+                        <label for="name" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Full Legal Name</label>
+                        <input type="text" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="name" name="name" placeholder="As it appears on documentation" required>
+                        <div class="invalid-feedback">Name configuration profile criteria is required.</div>
+                    </div>
+
+                    <!-- Email Field Block -->
+                    <div class="col-md-6 col-sm-12">
+                        <label for="email" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Email Identity</label>
+                        <input type="email" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="email" name="email" placeholder="For report notification deliveries" required>
+                        <div class="invalid-feedback">Valid target delivery email script is mandatory.</div>
+                    </div>
+
+                    <!-- Mobile Contact Number Frame -->
+                    <div class="col-md-6 col-sm-12">
+                        <label for="mobile" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">WhatsApp Contact Number</label>
+                        <input type="tel" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="mobile" name="mobile" placeholder="10-digit primary contact line" pattern="[0-9]{10}" required>
+                        <div class="invalid-feedback">Provide a valid 10-digit primary telephone metric.</div>
+                    </div>
+
+                    <!-- Gender Radio Framework Components -->
+                    <div class="col-md-6 col-sm-12">
+                        <label class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase d-block">Gender Node</label>
+                        <div class="d-flex gap-4 pt-2">
+                            <div class="form-check">
+                                <input class="form-check-input bg-transparent border-secondary cursor-pointer" type="radio" name="gender" id="genderMale" value="Male" checked>
+                                <label class="form-check-label cursor-pointer" for="genderMale">Male</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input bg-transparent border-secondary cursor-pointer" type="radio" name="gender" id="genderFemale" value="Female">
+                                <label class="form-check-label cursor-pointer" for="genderFemale">Female</label>
+                            </div>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-        
-        <div class="col-lg-5">
-            <div class="glass-card p-4 text-center sticky-top" style="top: 100px;">
-                <h4 class="text-white mb-3">Dynamic Secured Payment Counter</h4>
-                <div class="badge bg-dark border border-secondary text-gold p-2 mb-3 fs-6">Selected Tier: {{ report_type.upper() }}</div>
-                <div class="display-5 fw-bold text-white mb-4">₹{{ amount }}.00</div>
-                
-                <div class="bg-white p-3 rounded-3 d-inline-block shadow-lg mb-3">
-                    <!-- Hits the python api dynamically parsing the precise locked calculation requirement -->
-                    <img src="{{ url_for('main.generate_upi_qr', amount=amount) }}" alt="Secure UPI Processing Gate Matrix" class="img-fluid" style="max-width: 260px;">
+
+                    <!-- DOB Field Data Ingest Segment -->
+                    <div class="col-md-4 col-sm-12">
+                        <label for="birth_date" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Date of Birth</label>
+                        <input type="date" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="birth_date" name="birth_date" required>
+                        <div class="invalid-feedback">Select operational calendar matrix date parameters.</div>
+                    </div>
+
+                    <!-- Birth Time Matrix Node -->
+                    <div class="col-md-4 col-sm-12">
+                        <label for="birth_time" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Exact Time of Birth</label>
+                        <input type="time" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="birth_time" name="birth_time" required>
+                        <div class="invalid-feedback">Time vector parameters are required for mapping grids.</div>
+                    </div>
+
+                    <!-- Birth Location Node -->
+                    <div class="col-md-4 col-sm-12">
+                        <label for="birth_place" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Birthplace Location</label>
+                        <input type="text" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="birth_place" name="birth_place" placeholder="City, State, Country" required>
+                        <div class="invalid-feedback">Specify spatial geographic coordination properties.</div>
+                    </div>
+
+                    <!-- Language Criteria Preference Selector Dropdown Block -->
+                    <div class="col-md-12">
+                        <label for="language" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Report Output Language Language</label>
+                        <select class="form-select bg-transparent text-white border-secondary focus-ring py-2.5" id="language" name="language" required>
+                            <option value="English" class="bg-dark text-white" selected>English Language Presentation Model</option>
+                            <option value="Hindi" class="bg-dark text-white">Hindi Language Structural Translation</option>
+                            <option value="Assamese" class="bg-dark text-white">Assamese Regional Blueprint Version</option>
+                        </select>
+                    </div>
+
+                    <!-- Courier Target Postal Mapping Input Segment (Conditional Interface display logic bound below) -->
+                    <div class="col-md-12 d-none animate__animated animate__fadeIn" id="addressContainer">
+                        <label for="address" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Premium Physical Shipping Address</label>
+                        <textarea class="form-control bg-transparent text-white border-secondary focus-ring" id="address" name="address" rows="3" placeholder="Provide complete secure mailing path details including Pincode..."></textarea>
+                        <div class="invalid-feedback">Mailing framework parameters required for premium physical prints.</div>
+                    </div>
                 </div>
-                
-                <div class="text-dark bg-warning p-2 rounded-2 small fw-bold mb-3">
-                    Official Verified Target: 7099805039@ybl
+
+                <div class="d-grid mt-5">
+                    <button type="submit" class="btn btn-gold btn-lg py-3 fw-bold rounded-3 transition-all d-flex align-items-center justify-content-center gap-2">
+                        <span>Save Framework & Proceed to QR Settlement</span>
+                        <i class="bi bi-shield-check"></i>
+                    </button>
                 </div>
-                <p class="text-muted small text-start px-2">This processing node maps an un-truncable direct link to legal merchant account ledger **Ananda Sarmah**. Scan dynamically directly from inside this transaction display pipeline to immediately populate accurate invoice parameters.</p>
-            </div>
+            </form>
         </div>
     </div>
 </div>
-{% endblock %}
+
+<style>
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(255,255,255,0.05) !important;
+        border-color: var(--bs-primary) !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.22) !important;
+    }
+    /* Fixing default HTML input date/time icon appearance properties cleanly for unified theme color styling */
+    input::-webkit-calendar-picker-indicator {
+        filter: invert(1) opacity(0.6);
+        cursor: pointer;
+    }
+    input::-webkit-calendar-picker-indicator:hover {
