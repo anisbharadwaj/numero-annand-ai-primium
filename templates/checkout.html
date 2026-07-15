@@ -1,141 +1,187 @@
-{% extends 'base.html' %}
-
-{% block title %}Enter Birth Details - Numero Annand AI Premium{% endblock %}
-
-{% block content %}
-<div class="row justify-content-center animate__animated animate__fadeIn">
-    <div class="col-lg-8 col-md-11 col-sm-12">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numero Annand AI Premium - Secure Checkout</title>
+    
+    <!-- Core UI Frameworks -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://cloudflare.com" rel="stylesheet">
+    
+    <!-- Premium Dark Glassmorphism Styling System -->
+    <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-gold: #d4af37;
+        }
         
-        <!-- Order Stage Indicator Breadcrumb Vector -->
-        <div class="d-flex justify-content-between align-items-center mb-4 px-3 text-white-50 small font-monospace">
-            <span class="text-primary fw-bold"><i class="bi bi-1-circle-fill me-1"></i> 1. Form Details</span>
-            <span class="text-muted">➔</span>
-            <span><i class="bi bi-2-circle me-1"></i> 2. UPI Payment</span>
-            <span class="text-muted">➔</span>
-            <span><i class="bi bi-3-circle me-1"></i> 3. Complete</span>
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(13, 110, 253, 0.12) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(106, 17, 203, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .glass-navbar {
+            background: rgba(10, 14, 26, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .glass-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid var(--glass-border) !important;
+        }
+
+        .text-gold {
+            color: var(--accent-gold) !important;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+            border: none;
+            color: #000;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e5c158 0%, #c5921a 100%);
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border-color: var(--accent-gold) !important;
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.15) !important;
+            color: #ffffff !important;
+        }
+
+        /* Solid White Container for the QR Code image to avoid screen glare and scanning drop-outs */
+        .qr-white-holder {
+            background-color: #ffffff !important;
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: inline-block;
+            max-width: 260px;
+            width: 100%;
+        }
+
+        .qr-white-holder img {
+            display: block;
+            width: 100%;
+            height: auto;
+            mix-blend-mode: normal !important;
+            filter: none !important;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-compass-fill text-gold animate__animated animate__spin animate__slow animate__infinite"></i>
+                <span>Numero Annand <span class="text-gold">AI Premium</span></span>
+            </a>
         </div>
+    </nav>
 
-        <div class="glass-card p-4 p-md-5 rounded-4 shadow-lg border border-white border-opacity-10 text-white">
-            <h2 class="fw-bold tracking-tight mb-2">Configure Your Chart Matrix</h2>
-            <p class="text-white-50 small mb-4">Please submit precise chronological information below to optimize calculation algorithms.</p>
-            
-            <form method="POST" action="{{ url_for('payments.create_order') }}" class="needs-validation" novalidate>
-                <!-- CSRF Protection Vector Token Injection -->
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-                <!-- Selection Summary Card Block -->
-                <div class="p-3 bg-white bg-opacity-5 rounded-3 mb-4 border border-white border-opacity-5 d-flex justify-content-between align-items-center">
-                    <div>
-                        <span class="text-white-50 small d-block font-monospace uppercase text-uppercase">Selected Package</span>
-                        <h5 class="fw-bold m-0 text-gold" id="tierDisplay">Digital PDF Chart</h5>
-                    </div>
-                    <div class="text-end">
-                        <span class="text-white-50 small d-block font-monospace uppercase text-uppercase">Total Cost</span>
-                        <h4 class="fw-black m-0 text-white" id="amountDisplay">₹201</h4>
-                    </div>
+    <!-- Main Form Interface Layout -->
+    <div class="container my-5">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-10 col-xl-9 col-sm-12">
+                
+                <!-- Gateway Header Title Section -->
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold tracking-tight text-white mb-1"><i class="bi bi-shield-check text-gold me-2"></i>Order Gateway — Get Your Complete Premium Report</h2>
+                    <p class="text-white-50">Unlock your fully personalized, beautifully formatted extensive master blueprint edition.</p>
                 </div>
 
-                <!-- Hidden Input Form Hooks mapping variables seamlessly into post methods -->
-                <input type="hidden" name="report_type" id="report_type_input" value="digital">
-                <input type="hidden" name="amount" id="amount_input" value="201">
+                <!-- Database Order Post Form Pipeline Routing Links -->
+                <form method="POST" action="/create-order" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <!-- Form Protection Security Anchor (Handled via Flask-WTF context tokens) -->
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined }}"/>
 
-                <div class="row g-4">
-                    <!-- Name Field Form Row Layout Element -->
-                    <div class="col-md-6 col-sm-12">
-                        <label for="name" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Full Legal Name</label>
-                        <input type="text" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="name" name="name" placeholder="As it appears on documentation" required>
-                        <div class="invalid-feedback">Name configuration profile criteria is required.</div>
-                    </div>
+                    <div class="row g-4">
+                        
+                        <!-- Left Panel: User Profile Birth Data Intake Menu -->
+                        <div class="col-md-6 col-sm-12">
+                            <div class="glass-card p-4 rounded-4 h-100">
+                                <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Workspace Menu</h5>
+                                
+                                <!-- Name Input -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Name For Analysis</label>
+                                    <input type="text" class="form-control py-2.5" id="name" name="name" placeholder="Enter Full Name" required>
+                                    <div class="invalid-feedback">Full client analysis identity data profile path is required.</div>
+                                </div>
 
-                    <!-- Email Field Block -->
-                    <div class="col-md-6 col-sm-12">
-                        <label for="email" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Email Identity</label>
-                        <input type="email" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="email" name="email" placeholder="For report notification deliveries" required>
-                        <div class="invalid-feedback">Valid target delivery email script is mandatory.</div>
-                    </div>
+                                <!-- Date of Birth Datepicker Input -->
+                                <div class="mb-3">
+                                    <label for="birth_date" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Date Of Birth</label>
+                                    <input type="date" class="form-control py-2.5" id="birth_date" name="birth_date" required>
+                                    <div class="invalid-feedback">Please configure standard chronological calendar criteria input metrics.</div>
+                                </div>
 
-                    <!-- Mobile Contact Number Frame -->
-                    <div class="col-md-6 col-sm-12">
-                        <label for="mobile" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">WhatsApp Contact Number</label>
-                        <input type="tel" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="mobile" name="mobile" placeholder="10-digit primary contact line" pattern="[0-9]{10}" required>
-                        <div class="invalid-feedback">Provide a valid 10-digit primary telephone metric.</div>
-                    </div>
+                                <!-- Mobile Field Component -->
+                                <div class="mb-3">
+                                    <label for="mobile" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Mobile Number (Optional)</label>
+                                    <input type="tel" class="form-control py-2.5" id="mobile" name="mobile" placeholder="e.g. 7099805039" pattern="[0-9]{10}">
+                                    <div class="invalid-feedback">Provide a standard 10-digit primary telephone data structure vector.</div>
+                                </div>
 
-                    <!-- Gender Radio Framework Components -->
-                    <div class="col-md-6 col-sm-12">
-                        <label class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase d-block">Gender Node</label>
-                        <div class="d-flex gap-4 pt-2">
-                            <div class="form-check">
-                                <input class="form-check-input bg-transparent border-secondary cursor-pointer" type="radio" name="gender" id="genderMale" value="Male" checked>
-                                <label class="form-check-label cursor-pointer" for="genderMale">Male</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input bg-transparent border-secondary cursor-pointer" type="radio" name="gender" id="genderFemale" value="Female">
-                                <label class="form-check-label cursor-pointer" for="genderFemale">Female</label>
+                                <!-- Output Language Preference Selector Dropdown Menu -->
+                                <div class="mb-3">
+                                    <label for="language" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Select Analysis Language</label>
+                                    <select class="form-select py-2.5" id="language" name="language" required>
+                                        <option value="English" selected>English Output Model</option>
+                                        <option value="Hindi">Hindi Presentation Version</option>
+                                        <option value="Assamese">Assamese Regional Blueprint Variant</option>
+                                    </select>
+                                </div>
+
+                                <!-- Fallback Hidden Context Metrics Mapping Columns To Prevent Database Layout Crashes -->
+                                <input type="hidden" name="email" value="customer@numeroannand.ai">
+                                <input type="hidden" name="gender" value="Male">
+                                <input type="hidden" name="birth_time" value="12:00">
+                                <input type="hidden" name="birth_place" value="Assam, India">
                             </div>
                         </div>
-                    </div>
 
-                    <!-- DOB Field Data Ingest Segment -->
-                    <div class="col-md-4 col-sm-12">
-                        <label for="birth_date" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Date of Birth</label>
-                        <input type="date" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="birth_date" name="birth_date" required>
-                        <div class="invalid-feedback">Select operational calendar matrix date parameters.</div>
-                    </div>
-
-                    <!-- Birth Time Matrix Node -->
-                    <div class="col-md-4 col-sm-12">
-                        <label for="birth_time" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Exact Time of Birth</label>
-                        <input type="time" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="birth_time" name="birth_time" required>
-                        <div class="invalid-feedback">Time vector parameters are required for mapping grids.</div>
-                    </div>
-
-                    <!-- Birth Location Node -->
-                    <div class="col-md-4 col-sm-12">
-                        <label for="birth_place" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Birthplace Location</label>
-                        <input type="text" class="form-control bg-transparent text-white border-secondary focus-ring py-2.5" id="birth_place" name="birth_place" placeholder="City, State, Country" required>
-                        <div class="invalid-feedback">Specify spatial geographic coordination properties.</div>
-                    </div>
-
-                    <!-- Language Criteria Preference Selector Dropdown Block -->
-                    <div class="col-md-12">
-                        <label for="language" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Report Output Language Language</label>
-                        <select class="form-select bg-transparent text-white border-secondary focus-ring py-2.5" id="language" name="language" required>
-                            <option value="English" class="bg-dark text-white" selected>English Language Presentation Model</option>
-                            <option value="Hindi" class="bg-dark text-white">Hindi Language Structural Translation</option>
-                            <option value="Assamese" class="bg-dark text-white">Assamese Regional Blueprint Version</option>
-                        </select>
-                    </div>
-
-                    <!-- Courier Target Postal Mapping Input Segment (Conditional Interface display logic bound below) -->
-                    <div class="col-md-12 d-none animate__animated animate__fadeIn" id="addressContainer">
-                        <label for="address" class="form-label small fw-semibold tracking-wider text-white-50 text-uppercase">Premium Physical Shipping Address</label>
-                        <textarea class="form-control bg-transparent text-white border-secondary focus-ring" id="address" name="address" rows="3" placeholder="Provide complete secure mailing path details including Pincode..."></textarea>
-                        <div class="invalid-feedback">Mailing framework parameters required for premium physical prints.</div>
-                    </div>
-                </div>
-
-                <div class="d-grid mt-5">
-                    <button type="submit" class="btn btn-gold btn-lg py-3 fw-bold rounded-3 transition-all d-flex align-items-center justify-content-center gap-2">
-                        <span>Save Framework & Proceed to QR Settlement</span>
-                        <i class="bi bi-shield-check"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<style>
-    .form-control:focus, .form-select:focus {
-        background-color: rgba(255,255,255,0.05) !important;
-        border-color: var(--bs-primary) !important;
-        color: #fff !important;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.22) !important;
-    }
-    /* Fixing default HTML input date/time icon appearance properties cleanly for unified theme color styling */
-    input::-webkit-calendar-picker-indicator {
-        filter: invert(1) opacity(0.6);
-        cursor: pointer;
-    }
-    input::-webkit-calendar-picker-indicator:hover {
+                        <!-- Right Panel: Dynamic Tier Pricing Menu + Real Image Frame + Proof Processing -->
+                        <div class="col-md-6 col-sm-12">
+                            <div class="glass-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between">
+                                
+                                <div>
+                                    <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Step 1: Choose Your Premium Delivery Format</h5>
+                                    
+                                    <!-- Digital Format Checklist Tier Option Component -->
+                                    <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input border-secondary cursor-pointer" type="radio" name="report_tier_selector" id="tierDigital" value="digital" checked onclick="togglePricingTier('digital', 201)">
+                                            <label class="form-check-label fw-bold cursor-pointer text-white" for="tierDigital">
