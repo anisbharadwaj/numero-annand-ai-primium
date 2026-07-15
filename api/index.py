@@ -1,9 +1,9 @@
-import os
 import sys
-
-# Forces Vercel to dynamically recognize adjacent folder layouts for package modules
+import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app import create_app
+from app import app as flask_app
 
-app = create_app()
+def handler(request, response):
+    """Vercel serverless handler"""
+    return flask_app(request, response)
