@@ -1,89 +1,80 @@
 import os
-import random
-import string
-from datetime import datetime
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+from flask_login import login_required
 from werkzeug.utils import secure_filename
-from app import db
-from app.models import Order
+from app.models import db, Order
 
 payments_bp = Blueprint('payments', __name__)
 
-def generate_reference():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@payments_bp.route('/checkout/<string:plan_type>', methods=['GET', 'POST'])
-def checkout_route(plan_type):
-    # Enforce clear business rules pricing models upfront
-    if plan_type == 'printed':
-        amount = 501
-        report_label = "Premium Printed Report"
-    else:
-        plan_type = 'digital'
-        amount = 201
-        report_label = "Digital PDF Report"
+@payments_bp.route('/checkout', methods=['GET'])
+def checkout():
+    return render_template('checkout.html')
 
-    if request.method == 'POST':
-        try:
-            # Server-Side structural binding parsing
-            dob_str = request.form.get('dob')
-            dob_date = datetime.strptime(dob_str, '%Y-%m-%d').date()
-            
-            ref = generate_reference()
-            new_order = Order(
-                order_ref=ref,
-                name=request.form.get('name'),
-                dob=dob_date,
-                birth_time=request.form.get('birth_time'),
-                birth_place=request.form.get('birth_place'),
-                mobile=request.form.get('mobile'),
-                email=request.form.get('email'),
-                gender=request.form.get('gender'),
-                language=request.form.get('language'),
-                report_type=plan_type,
-                address=request.form.get('address', ''),
-                amount=amount,
-                payment_status='PENDING'
-            )
-            db.session.add(new_order)
-            db.session.commit()
-            return redirect(url_for('payments.payment_gateway_route', order_ref=ref))
-        except Exception as e:
-            db.session.rollback()
-            flash("Error creating profile mapping. Ensure all input constraints match.", "danger")
-            
-    return render_template('checkout.html', plan_type=plan_type, amount=amount, report_label=report_label)
-
-@payments_bp.route('/pay/<string:order_ref>', methods=['GET', 'POST'])
-def payment_gateway_route(order_ref):
-    order = Order.query.filter_by(order_ref=order_ref).first_or_404()
-    
-    if request.method == 'POST':
-        utr = request.form.get('utr')
-        file = request.files.get('screenshot')
+@payments_bp.route('/create-order', methods=['POST'])
+def create_order():
+    try:
+        report_type = request.form.get('report_type')
+        amount = int(request.form.get('amount', 201))
         
-        if not utr or len(utr) < 6:
-            flash("Please enter a valid Transaction UTR reference ID.", "warning")
-            return render_template('payment.html', order=order)
-            
-        filename = None
-        if file and allowed_file(file.filename):
-            sec_filename = secure_filename(file.filename)
-            filename = f"{order.order_ref}_{sec_filename}"
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            
+        new_order = Order(
+            name=request.form.get('name'),
+            email=request.form.get('email'),
+            mobile=request.form.get('mobile'),
+            gender=request.form.get('gender'),
+            birth_date=request.form.get('birth_date'),
+            birth_time=request.form.get('birth_time'),
+            birth_place=request.form.get('birth_place'),
+            language=request.form.get('language'),
+            report_type=report_type,
+            amount=amount,
+            address=request.form.get('address') if report_type == 'premium' else None
+        )
+        db.session.add(new_order)
+        db.session.commit()
+        return redirect(url_for('payments.pay_order', order_id=new_order.id))
+    except Exception:
+        flash("Failed to process transaction structure framework parameters.", "error")
+        return redirect(url_for('main.index'))
+
+@payments_bp.route('/pay/<int:order_id>', methods=['GET'])
+def pay_order(order_id):
+    order = Order.query.get_or_404(order_id)
+    return render_template('payment.html', order=order)
+
+@payments_bp.route('/submit-proof/<int:order_id>', methods=['POST'])
+def submit_proof(order_id):
+    order = Order.query.get_or_404(order_id)
+    utr = request.form.get('utr', '').strip()
+    
+    if len(utr) != 12 or not utr.isdigit():
+        flash("Invalid UTR layout structural parsing format.", "error")
+        return redirect(url_for('payments.pay_order', order_id=order.id))
+        
+    file = request.files.get('screenshot')
+    if file and allowed_file(file.filename):
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        filename = secure_filename(f"utr_{utr}_{file.filename}")
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        
         order.utr = utr
         order.screenshot = filename
         db.session.commit()
+        return render_template('success.html', order=order)
         
-        return redirect(url_for('payments.success_route', order_ref=order.order_ref))
-        
-    return render_template('payment.html', order=order)
+    flash("Valid proof screenshot attachment required.", "error")
+    return redirect(url_for('payments.pay_order', order_id=order.id))
 
-@payments_bp.route('/success/<string:order_ref>')
-def success_route(order_ref):
-    order = Order.query.filter_by(order_ref=order_ref).first_or_404()
-    return render_template('success.html', order=order)
+@payments_bp.route('/admin/verify/<int:order_id>', methods=['POST'])
+@login_required
+def verify_order_payment(order_id):
+    order = Order.query.get_or_404(order_id)
+    order.payment_status = 'completed'
+    db.session.commit()
+    flash(f"Order #{order.id} payment verified successfully!", "success")
+    return redirect(url_for('main.dashboard'))
