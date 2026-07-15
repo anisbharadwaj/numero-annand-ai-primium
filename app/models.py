@@ -94,4 +94,5 @@ class Payment(db.Model):
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)  
     amount = db.Column(db.Float, nullable=False)  
     upi_transaction_id = db.Column(db.String(100))  
-    payment_method = db.Column(db.String(50),
+    payment_method = db.Column(db.String(50), default='upi')  
+    status =
