@@ -7,19 +7,19 @@ csrf = CSRFProtect()
 login_manager = LoginManager()
 
 def create_app():
-    # Calculate exact absolute paths for templates and static folders
-    base_dir = os.path.abspath(os.path.dirname(__file__)) # location of app/
-    root_dir = os.path.dirname(base_dir)                  # location of project root/
+    # Use absolute project root calculation compatible with Vercel deployment structures
+    # It explicitly maps the directory where index.py resides
+    root_dir = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
     
     template_path = os.path.join(root_dir, 'templates')
     static_path = os.path.join(root_dir, 'static')
 
     app = Flask(__name__, template_folder=template_path, static_folder=static_path)
     
-    # Safe fallback configurations
+    # Secure Session Fallback Tokens
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
     
-    # Secure serverless database engine routing fallback config
+    # Serverless context database configurations
     database_url = os.environ.get('DATABASE_URL')
     if not database_url:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
@@ -68,4 +68,3 @@ def create_app():
         pass
 
     return app
-
