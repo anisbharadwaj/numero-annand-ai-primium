@@ -7,19 +7,18 @@ csrf = CSRFProtect()
 login_manager = LoginManager()
 
 def create_app():
-    # Use absolute project root calculation compatible with Vercel deployment structures
-    # It explicitly maps the directory where index.py resides
-    root_dir = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+    # Enforce clear absolute task mapping paths for serverless nodes
+    # Vercel places applications in '/var/task'. If it is missing, it falls back to local.
+    root_dir = os.environ.get('LAMBDA_TASK_ROOT', os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     
     template_path = os.path.join(root_dir, 'templates')
     static_path = os.path.join(root_dir, 'static')
 
     app = Flask(__name__, template_folder=template_path, static_folder=static_path)
     
-    # Secure Session Fallback Tokens
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
     
-    # Serverless context database configurations
+    # In-memory ephemeral DB prevents read-only platform crashes
     database_url = os.environ.get('DATABASE_URL')
     if not database_url:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
@@ -30,7 +29,6 @@ def create_app():
         
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Initialize Extension Modules
     from app.models import db, AdminUser
     db.init_app(app)
     csrf.init_app(app)
@@ -43,7 +41,6 @@ def create_app():
     def load_user(user_id):
         return AdminUser.query.get(int(user_id))
 
-    # Register Structural Architecture Blueprint Routing Channels
     from app.main.routes import main_bp
     from app.auth.routes import auth_bp
     from app.payments.routes import payments_bp
@@ -54,7 +51,6 @@ def create_app():
     app.register_blueprint(payments_bp)
     app.register_blueprint(qr_bp)
 
-    # Initialize contextual setup safely inside Serverless environment parameters
     try:
         with app.app_context():
             db.create_all()
