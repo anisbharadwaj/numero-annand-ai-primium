@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Control Panel - Numero Annand AI Premium{% endblock %}
+
+{% block content %}
+<div class="row g-4 animate__animated animate__fadeIn">
+    <!-- Dashboard Sub-Header Control Bar Section -->
+    <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 border-bottom border-white border-opacity-10 pb-4">
+        <div>
+            <h2 class="fw-bold tracking-tight text-white mb-0">Management Portal</h2>
+            <p class="text-white-50 small mb-0">Logged in as Authorized Operator: <span class="text-gold fw-semibold">Ananda Sarmah</span></p>
+        </div>
+        <div>
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm px-3 py-2 rounded-2 d-inline-flex align-items-center gap-2">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Secure Sign Out</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Metric Snapshot Counters Framework Overview -->
+    <div class="col-12">
+        <div class="row g-3">
+            <div class="col-md-4 col-sm-12">
+                <div class="glass-card p-4 rounded-3 border border-white border-opacity-5">
+                    <span class="text-white-50 small font-monospace text-uppercase tracking-wider">Total Sales Invoiced</span>
+                    <h3 class="fw-black text-white m-0 mt-1">₹{{ total_revenue|default(0) }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="glass-card p-4 rounded-3 border border-white border-opacity-5">
+                    <span class="text-white-50 small font-monospace text-uppercase tracking-wider">Pending Validations</span>
+                    <h3 class="fw-black text-warning m-0 mt-1">{{ pending_count|default(0) }} Orders</h3>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="glass-card p-4 rounded-3 border border-white border-opacity-5">
+                    <span class="text-white-50 small font-monospace text-uppercase tracking-wider">Settled Fullfillments</span>
+                    <h3 class="fw-black text-success m-0 mt-1">{{ completed_count|default(0) }} Checked</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Primary Live Ledger Registry Data Block Grid -->
+    <div class="col-12">
+        <div class="glass-card rounded-4 border border-white border-opacity-10 overflow-hidden shadow-lg">
+            <div class="p-4 bg-white bg-opacity-5 border-bottom border-white border-opacity-5">
+                <h5 class="fw-bold m-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-list-stars text-primary"></i>
+                    <span>Live Order Tracking Manifest</span>
+                </h5>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle mb-0 small">
+                    <thead class="table-light bg-opacity-5 text-white border-secondary">
+                        <tr class="font-monospace text-uppercase tracking-wider" style="font-size: 0.75rem;">
+                            <th class="ps-4 py-3">ID</th>
+                            <th class="py-3">Customer Core Data Matrix</th>
+                            <th class="py-3">Chronological Birth Metadata</th>
+                            <th class="py-3">Tier</th>
+                            <th class="py-3">Financial UTR Tracking</th>
+                            <th class="py-3">Settlement</th>
+                            <th class="pe-4 py-3 text-end">Administrative Routing Triggers</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-secondary">
+                        {% if orders %}
+                            {% for order in orders %}
+                            <tr class="border-bottom border-white border-opacity-5">
+                                <td class="ps-4 font-monospace fw-bold text-white-50">#{{ order.id }}</td>
+                                <td>
+                                    <div class="fw-bold text-white fs-6">{{ order.name }}</div>
+                                    <div class="text-white-50 text-break" style="font-size: 0.8rem;">{{ order.email }}</div>
+                                    <div class="text-muted" style="font-size: 0.8rem;"><i class="bi bi-whatsapp text-success me-1"></i>{{ order.mobile }}</div>
+                                </td>
+                                <td>
+                                    <div class="text-white font-monospace"><i class="bi bi-calendar3 me-1.5 text-white-50"></i>{{ order.birth_date }}</div>
+                                    <div class="text-white-50 font-monospace" style="font-size: 0.8rem;"><i class="bi bi-clock me-1.5"></i>{{ order.birth_time }}</div>
+                                    <div class="text-muted text-truncate" style="max-width: 160px; font-size: 0.8rem;"><i class="bi bi-geo-alt me-1.5"></i>{{ order.birth_place }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge {% if order.report_type == 'premium' %}bg-primary text-white border-primary{% else %}bg-secondary text-white-50 border-secondary{% endif %} bg-opacity-10 border px-2 py-1 text-uppercase font-monospace" style="font-size: 0.68rem;">
+                                        {{ order.report_type }} (₹{{ order.amount }})
+                                    </span>
+                                    <div class="text-muted small mt-1 font-monospace" style="font-size: 0.72rem;">{{ order.language }}</div>
+                                </td>
+                                <td>
+                                    <span class="font-monospace d-block text-white fw-bold select-all bg-black bg-opacity-20 px-2 py-1 rounded border border-white border-opacity-5 mb-1" style="font-size: 0.8rem;">{{ order.utr }}</span>
+                                    {% if order.screenshot %}
+                                        <a href="/static/uploads/{{ order.screenshot }}" target="_blank" class="btn btn-outline-info btn-xs py-0.5 px-2 rounded font-monospace" style="font-size: 0.65rem;">
+                                            <i class="bi bi-image me-1"></i>Inspect Audit Image
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted font-monospace" style="font-size: 0.65rem;">No Asset Linked</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.payment_status == 'completed' %}
+                                        <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-20 px-2 py-1 font-monospace text-uppercase">Verified Ledger</span>
+                                    {% else %}
+                                        <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-20 px-2 py-1 font-monospace text-uppercase animate__animated animate__pulse animate__infinite">Review Required</span>
+                                    {% endif %}
+                                </td>
+                                <td class="pe-4 text-end">
+                                    {% if order.payment_status != 'completed' %}
+                                        <form method="POST" action="{{ url_for('payments.verify_order_payment', order_id=order.id) }}" class="d-inline">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                            <button type="submit" class="btn btn-success btn-sm font-monospace fw-bold tracking-wide rounded-2 px-3 shadow-sm hover-scale transition-all" style="font-size: 0.75rem;">
+                                                <i class="bi bi-check2-all me-1"></i> Approve Payment
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <button class="btn btn-dark btn-sm font-monospace text-muted border-secondary border-opacity-20 rounded-2 px-3 small" disabled>
+                                            <i class="bi bi-lock-fill me-1"></i> Immutable
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-white-50">
+                                    <i class="bi bi-inbox display-4 d-block mb-2 text-muted"></i>
+                                    <span class="font-monospace">No client transactions present in database infrastructure stack logs yet.</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-dark {
+        --bs-table-bg: transparent !important;
+        --bs-table-hover-bg: rgba(255, 255, 255, 0.02) !important;
+    }
+    .select-all {
+        user-select: all;
+        -webkit-user-select: all;
+    }
+    .hover-scale:hover {
+        transform: scale(1.03);
+    }
+    .btn-xs {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+</style>
+{% endblock %}
