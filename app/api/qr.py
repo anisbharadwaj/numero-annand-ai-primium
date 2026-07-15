@@ -9,18 +9,18 @@ qr_bp = Blueprint('api_qr', __name__)
 @qr_bp.route('/api/qr', methods=['GET'])
 def get_payment_qr():
     try:
-        # Mandatory Clean Merchant Billing Metrics
-        payee_vpa = "7099805039@ybl"
+        # UPDATED: Using your exact PhonePe verified merchant details
+        payee_vpa = "7099805039-2@axl"
         payee_name = quote("Ananda Sarmah")
         transaction_note = quote("Numero Annand AI Premium")
         
-        # Pull amount safely from user choices (Default to 201)
+        # Safely pull transaction amounts (₹201 or ₹501)
         amount_raw = request.args.get('amount', '201')
         
-        # Construct STRICT standard banking Deep Link string protocol
+        # Build the correct deep link protocol structure
         upi_uri = f"upi://pay?pa={payee_vpa}&pn={payee_name}&tn={transaction_note}&am={amount_raw}&cu=INR"
         
-        # Render a crisp, low-density, easily scannable QR matrix image dynamically
+        # Create a scannable, clean QR grid layout
         qr = segno.make(upi_uri, error='L')
         buffer = io.BytesIO()
         qr.save(buffer, kind='png', scale=8, border=2)
