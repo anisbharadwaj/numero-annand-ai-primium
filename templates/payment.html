@@ -6,7 +6,7 @@
 <div class="row justify-content-center animate__animated animate__fadeIn">
     <div class="col-lg-6 col-md-10 col-sm-12">
         
-        <!-- Order Stage Progress Breadcrumb Tracking Layout -->
+        <!-- Stage Progress Tracking Header Tracker -->
         <div class="d-flex justify-content-between align-items-center mb-4 px-3 text-white-50 small font-monospace mx-auto" style="max-width: 480px;">
             <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> 1. Form Details</span>
             <span class="text-success">➔</span>
@@ -18,19 +18,15 @@
         <!-- Glassmorphism Main Central Payment Canvas Board Box -->
         <div class="glass-card p-4 p-md-5 rounded-4 shadow-lg border border-white border-opacity-10 text-white text-center">
             
-            <h3 class="fw-bold tracking-tight mb-2">Scan Secure UPI QR</h3>
+            <h3 class="fw-bold tracking-tight mb-2">Scan Verified PhonePe QR</h3>
             <p class="text-white-50 small mb-4">Complete your payment of <span class="text-gold fw-bold fs-5">₹{{ order.amount }}</span> safely using any banking application.</p>
 
-            <!-- Dynamic Segno QR Base64 Vector Stream Box Container -->
-            <div class="position-relative d-inline-block bg-white p-3 rounded-4 mb-4 shadow-lg animate__animated animate__zoomIn" style="min-width: 240px; min-height: 240px;">
-                <div id="qrLoadingSpinner" class="position-absolute top-50 start-50 translate-middle text-dark">
-                    <div class="spinner-border spinner-border-sm" role="status"></div>
-                </div>
-                <!-- Dynamic Base64 Inline Script injection target link -->
-                <img id="dynamicQrImage" src="" alt="Secure Payment QR Canvas" class="img-fluid rounded-2 d-none" style="width: 220px; height: 220px;">
+            <!-- FIXED: Loading your EXACT original verified merchant asset directly -->
+            <div class="d-inline-block bg-white p-3 rounded-4 mb-4 shadow-lg" style="max-width: 260px;">
+                <img src="{{ url_for('static', filename='images/payment_qr.png') }}" alt="Official PhonePe Merchant QR" class="img-fluid rounded-2">
             </div>
 
-            <!-- Copyable Manual VPA Ingest Segment Container -->
+            <!-- Manual Selection Copy Segment Row Element -->
             <div class="p-3 bg-white bg-opacity-5 rounded-3 mb-4 border border-white border-opacity-5 text-start">
                 <label class="form-label text-white-50 small fw-bold tracking-wider text-uppercase font-monospace mb-1" style="font-size: 0.7rem;">Official PhonePe Merchant VPA</label>
                 <div class="input-group">
@@ -45,9 +41,8 @@
                 </div>
             </div>
 
-            <!-- Form Data Verification Processing Framework Gateway -->
+            <!-- Verification Processing Form Interface Section -->
             <form method="POST" action="{{ url_for('payments.submit_proof', order_id=order.id) }}" enctype="multipart/form-data" class="needs-validation text-start mt-4" novalidate>
-                <!-- Security Token Frame Injection -->
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
                 <!-- 12-Digit Reference UTR Record Tracking Code Box -->
@@ -79,7 +74,6 @@
     </div>
 </div>
 
-<!-- Embedded Form State Styling Optimization Overrides -->
 <style>
     .form-control:focus {
         background-color: rgba(255,255,255,0.04) !important;
@@ -101,39 +95,9 @@
         transition: background-color 0.2s ease;
         cursor: pointer;
     }
-    input[type="file"]::file-selector-button:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-    }
 </style>
 
-<!-- Operational Event Routing Controllers Script Block -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const targetAmount = "{{ order.amount }}";
-        const qrImgElement = document.getElementById('dynamicQrImage');
-        const spinnerElement = document.getElementById('qrLoadingSpinner');
-
-        // Dynamically fetch custom level-L scannable vector image parameters
-        fetch(`/api/qr?amount=${targetAmount}`)
-            .then(response => response.json())
-            .then(res => {
-                if(res.status === 'success' && res.data.qr_image_base64) {
-                    qrImgElement.src = res.data.qr_image_base64;
-                    qrImgElement.classList.remove('d-none');
-                    spinnerElement.classList.add('d-none');
-                } else {
-                    handleQrGenerationFallback();
-                }
-            })
-            .catch(err => {
-                handleQrGenerationFallback();
-            });
-    });
-
-    function handleQrGenerationFallback() {
-        document.getElementById('qrLoadingSpinner').innerHTML = '<span class="text-danger small fw-bold px-2">QR stream offline. Please copy merchant string below.</span>';
-    }
-
     function copyUpiVpaText() {
         const copyText = document.getElementById("upiVpaString");
         copyText.select();
@@ -150,7 +114,6 @@
         }, 2000);
     }
 
-    // Standard client form submit checks loop
     (function () {
         'use strict'
         var forms = document.querySelectorAll('.needs-validation')
