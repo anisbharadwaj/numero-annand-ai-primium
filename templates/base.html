@@ -4,38 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Numero Annand AI Premium</title>
-    <!-- Bootstrap 5 CSS Framework CDN -->
     <link href="https://jsdelivr.net" rel="stylesheet">
-    <!-- Google Fonts Infrastructure bindings -->
-    <link href="https://googleapis.com" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c20 0%, #15102a 50%, #060214 100%);
+            color: #f1f1f6;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-nav {
+            background: rgba(15, 12, 32, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-gold {
+            color: #dfb76c !important;
+            text-shadow: 0 0 10px rgba(223, 183, 108, 0.3);
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #dfb76c 0%, #b89149 100%);
+            color: #0d0a1a !important;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(223, 183, 108, 0.4);
+        }
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #dfb76c;
+            color: #fff;
+            box-shadow: none;
+        }
+    </style>
 </head>
 <body>
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    
-    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary glass-panel m-3 position-sticky top-0 z-3">
+    <nav class="navbar navbar-expand-lg navbar-dark glass-nav sticky-top">
         <div class="container">
-            <a class="navbar-brand text-gradient-gold fw-bold" href="{{ url_for('main.index_route') }}">✨ Numero Annand AI</a>
-            <div class="ms-auto">
-                <a href="{{ url_for('main.pricing_route') }}" class="btn btn-outline-light btn-sm me-2">View Reports</a>
+            <a class="navbar-brand text-gold fw-bold" href="{{ url_for('main.index') }}">🔮 Numero Annand AI Premium</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-light me-3" href="{{ url_for('main.pricing') }}">Pricing Plans</a>
                 {% if current_user.is_authenticated %}
-                <a href="{{ url_for('auth.dashboard_route') }}" class="btn btn-info btn-sm me-2">Portal</a>
-                <a href="{{ url_for('auth.logout_route') }}" class="btn btn-danger btn-sm">Exit</a>
+                    <a class="nav-link text-warning me-3" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{{ url_for('main.logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-link text-light opacity-50" href="{{ url_for('main.login') }}">Admin Space</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        {% include 'alerts.html' %}
-        {% block content %}{% endblock %}
+    <div class="container my-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} bg-dark text-light border-secondary alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </div>
 
-    <footer class="container text-center text-muted py-5 border-top border-secondary mt-5">
-        <p>© 2026 Numero Annand AI Premium. Managed under Executive Bank Custody Account: Ananda Sarmah.</p>
+    {% block content %}{% endblock %}
+
+    <footer class="container text-center py-5 mt-5 border-top border-secondary opacity-50">
+        <p>&copy; 2026 Numero Annand AI Premium. All Rights Reserved. Managed Account of Ananda Sarmah.</p>
     </footer>
 
     <script src="https://jsdelivr.net"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
