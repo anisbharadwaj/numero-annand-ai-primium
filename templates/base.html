@@ -4,41 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Numero Annand AI Premium</title>
+    <!-- Bootstrap 5 CSS Framework CDN -->
     <link href="https://jsdelivr.net" rel="stylesheet">
-    <link rel="stylesheet" href="https://cloudflare.com"/>
+    <!-- Google Fonts Infrastructure bindings -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top glass-card border-0 rounded-0">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary glass-panel m-3 position-sticky top-0 z-3">
         <div class="container">
-            <a class="navbar-brand fw-bold text-gradient" href="{{ url_for('main.index') }}">🔮 Numero Annand AI</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}#features">Features</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.pricing') }}">Pricing</a></li>
-                    {% if current_user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link btn btn-outline-info btn-sm mx-2 text-white px-3" href="{{ url_for('payments.dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link btn btn-danger btn-sm text-white px-3" href="{{ url_for('auth.logout') }}">Logout</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link btn btn-primary btn-sm px-4 rounded-pill text-white ms-2" href="{{ url_for('main.pricing') }}">Get Report</a></li>
-                    {% endif %}
-                </ul>
+            <a class="navbar-brand text-gradient-gold fw-bold" href="{{ url_for('main.index_route') }}">✨ Numero Annand AI</a>
+            <div class="ms-auto">
+                <a href="{{ url_for('main.pricing_route') }}" class="btn btn-outline-light btn-sm me-2">View Reports</a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('auth.dashboard_route') }}" class="btn btn-info btn-sm me-2">Portal</a>
+                <a href="{{ url_for('auth.logout_route') }}" class="btn btn-danger btn-sm">Exit</a>
+                {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="container mt-3">
+    <div class="container">
         {% include 'alerts.html' %}
+        {% block content %}{% endblock %}
     </div>
 
-    {% block content %}{% endblock %}
-
-    <footer class="py-4 text-center mt-5 glass-card border-0 rounded-0">
-        <p class="m-0 text-muted">&copy; 2026 Numero Annand AI Premium. Crafted by Annand Sarma. All Rights Reserved.</p>
+    <footer class="container text-center text-muted py-5 border-top border-secondary mt-5">
+        <p>© 2026 Numero Annand AI Premium. Managed under Executive Bank Custody Account: Ananda Sarmah.</p>
     </footer>
 
     <script src="https://jsdelivr.net"></script>
