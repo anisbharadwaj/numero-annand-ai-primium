@@ -1,66 +1,43 @@
-import os
 from flask import Flask
-from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager
+from flask_cors import CORS
+from flask_migrate import Migrate
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+from config import Config
+from models import db
+import os
 
-csrf = CSRFProtect()
-login_manager = LoginManager()
+bcrypt = Bcrypt()
+jwt = JWTManager()
+migrate = Migrate()
 
-def create_app():
-    # Calculate clear absolute workspace dimensions matching Vercel's environment
-    base_dir = os.path.dirname(os.path.abspath(__file__)) # Location of app/
-    root_dir = os.path.dirname(base_dir)                  # Location of project root/
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
     
-    template_path = os.path.join(root_dir, 'templates')
-    static_path = os.path.join(root_dir, 'static')
-
-    app = Flask(__name__, template_folder=template_path, static_folder=static_path)
+    # Ensure instance folder exists
+    os.makedirs(app.instance_path, exist_ok=True)
     
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
-    
-    # In-memory ephemeral DB prevents read-only container platform blockages
-    database_url = os.environ.get('DATABASE_URL')
-    if not database_url:
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    else:
-        if database_url.startswith("postgres://"):
-            database_url = database_url.replace("postgres://", "postgresql://", 1)
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-        
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    from app.models import db, AdminUser
+    # Initialize extensions
     db.init_app(app)
-    csrf.init_app(app)
-    login_manager.init_app(app)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
+    migrate.init_app(app, db)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
     
-    login_manager.login_view = 'auth.login'
-    login_manager.login_message_category = 'warning'
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return AdminUser.query.get(int(user_id))
-
-    from app.main.routes import main_bp
-    from app.auth.routes import auth_bp
-    from app.payments.routes import payments_bp
-    from app.api.qr import qr_bp
-
-    app.register_blueprint(main_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(payments_bp)
-    app.register_blueprint(qr_bp)
-
-    try:
-        with app.app_context():
-            db.create_all()
-            from werkzeug.security import generate_password_hash
-            if not AdminUser.query.filter_by(username='admin').first():
-                hashed_pwd = generate_password_hash('AnnandSarmaAI2026')
-                master_admin = AdminUser(username='admin', password_hash=hashed_pwd)
-                db.session.add(master_admin)
-                db.session.commit()
-    except Exception:
-        pass
-
+    # Register blueprints
+    from auth.routes import auth_bp
+    from main.routes import main_bp
+    from payments.routes import payments_bp
+    from studyiq.routes import studyiq_bp
+    
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(main_bp, url_prefix='/api')
+    app.register_blueprint(payments_bp, url_prefix='/api/payments')
+    app.register_blueprint(studyiq_bp, url_prefix='/api/studyiq')
+    
+    # Create tables
+    with app.app_context():
+        db.create_all()
+    
     return app
