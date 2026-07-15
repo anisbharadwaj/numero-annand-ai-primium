@@ -7,12 +7,19 @@ csrf = CSRFProtect()
 login_manager = LoginManager()
 
 def create_app():
-    app = Flask(__name__, template_folder='../templates', static_folder='../static')
+    # Calculate exact absolute paths for templates and static folders
+    base_dir = os.path.abspath(os.path.dirname(__file__)) # location of app/
+    root_dir = os.path.dirname(base_dir)                  # location of project root/
     
-    # Safe fallback configuration settings
+    template_path = os.path.join(root_dir, 'templates')
+    static_path = os.path.join(root_dir, 'static')
+
+    app = Flask(__name__, template_folder=template_path, static_folder=static_path)
+    
+    # Safe fallback configurations
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
     
-    # If no database link is in environment variables, use memory storage to avoid read-only system crashes
+    # Secure serverless database engine routing fallback config
     database_url = os.environ.get('DATABASE_URL')
     if not database_url:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
@@ -36,7 +43,7 @@ def create_app():
     def load_user(user_id):
         return AdminUser.query.get(int(user_id))
 
-    # Register Blueprints
+    # Register Structural Architecture Blueprint Routing Channels
     from app.main.routes import main_bp
     from app.auth.routes import auth_bp
     from app.payments.routes import payments_bp
@@ -47,7 +54,7 @@ def create_app():
     app.register_blueprint(payments_bp)
     app.register_blueprint(qr_bp)
 
-    # Initialize context safely without crashing if file storage is locked out
+    # Initialize contextual setup safely inside Serverless environment parameters
     try:
         with app.app_context():
             db.create_all()
@@ -58,6 +65,7 @@ def create_app():
                 db.session.add(master_admin)
                 db.session.commit()
     except Exception:
-        pass # Prevents the serverless node from crashing completely if disk writing fails
+        pass
 
     return app
+
