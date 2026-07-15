@@ -1,39 +1,33 @@
-import io
+import os
 import base64
-from urllib.parse import quote
-import segno
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, current_app
 
 qr_bp = Blueprint('api_qr', __name__)
 
 @qr_bp.route('/api/qr', methods=['GET'])
 def get_payment_qr():
     try:
-        # UPDATED: Using your exact PhonePe verified merchant details
-        payee_vpa = "7099805039-2@axl"
-        payee_name = quote("Ananda Sarmah")
-        transaction_note = quote("Numero Annand AI Premium")
+        # Calculate the absolute location of your uploaded image file on Vercel
+        static_dir = current_app.static_folder
+        image_path = os.path.join(static_dir, 'images', 'payment_qr.png')
         
-        # Safely pull transaction amounts (₹201 or ₹501)
-        amount_raw = request.args.get('amount', '201')
-        
-        # Build the correct deep link protocol structure
-        upi_uri = f"upi://pay?pa={payee_vpa}&pn={payee_name}&tn={transaction_note}&am={amount_raw}&cu=INR"
-        
-        # Create a scannable, clean QR grid layout
-        qr = segno.make(upi_uri, error='L')
-        buffer = io.BytesIO()
-        qr.save(buffer, kind='png', scale=8, border=2)
-        buffer.seek(0)
-        
-        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        # Safe structural check to prevent missing file layout errors
+        if not os.path.exists(image_path):
+            return jsonify({
+                "status": "error", 
+                "message": "Target original payment_qr.png asset file not found in static/images/ directory."
+            }), 404
+            
+        # Read your exact binary image data and convert it safely to a web stream layout
+        with open(image_path, "rb") as image_file:
+            base64_data = base64.b64encode(image_file.read()).decode('utf-8')
+            
         return jsonify({
             "status": "success",
             "data": {
-                "upi_url": upi_uri,
-                "qr_image_base64": f"data:image/png;base64,{base64_image}"
+                "qr_image_base64": f"data:image/png;base64,{base64_data}"
             }
         }), 200
         
     except Exception:
-        return jsonify({"status": "error", "message": "Failed to generate clear QR payload."}), 500
+        return jsonify({"status": "error", "message": "Failed to compile image metadata stream."}), 500
