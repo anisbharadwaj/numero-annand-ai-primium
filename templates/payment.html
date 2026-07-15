@@ -21,9 +21,9 @@
             <h3 class="fw-bold tracking-tight mb-2">Scan Verified PhonePe QR</h3>
             <p class="text-white-50 small mb-4">Complete your payment of <span class="text-gold fw-bold fs-5">₹{{ order.amount }}</span> safely using any banking application.</p>
 
-            <!-- Amount-specific UPI QR generated on the server (dark-on-white for reliable scanning) -->
+            <!-- FIXED: Loading your EXACT original verified merchant asset directly -->
             <div class="d-inline-block bg-white p-3 rounded-4 mb-4 shadow-lg" style="max-width: 260px;">
-                <img src="{{ url_for('api_qr.order_qr', order_id=order.id) }}" alt="Scan to pay {{ order.amount }} rupees to Ananda Sarmah via UPI" class="img-fluid rounded-2">
+                <img src="{{ url_for('static', filename='images/payment_qr.png') }}" alt="Official PhonePe Merchant QR" class="img-fluid rounded-2">
             </div>
 
             <!-- Manual Selection Copy Segment Row Element -->

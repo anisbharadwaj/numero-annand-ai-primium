@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_login import login_required
 from werkzeug.utils import secure_filename
 from app.models import db, Order
-from app.numerology import build_report
 
 payments_bp = Blueprint('payments', __name__)
 
@@ -38,21 +37,10 @@ def create_order():
         )
         db.session.add(new_order)
         db.session.commit()
-        # Show the free numerology preview before payment.
-        return redirect(url_for('payments.view_report', order_id=new_order.id))
+        return redirect(url_for('payments.pay_order', order_id=new_order.id))
     except Exception:
         flash("Failed to process transaction structure framework parameters.", "error")
         return redirect(url_for('main.index'))
-
-@payments_bp.route('/report/<int:order_id>', methods=['GET'])
-def view_report(order_id):
-    order = Order.query.get_or_404(order_id)
-    try:
-        report = build_report(order.name, order.birth_date, order.mobile)
-    except Exception:
-        flash("We could not read that date of birth. Please start again with a valid date.", "error")
-        return redirect(url_for('payments.checkout'))
-    return render_template('report.html', order=order, report=report)
 
 @payments_bp.route('/pay/<int:order_id>', methods=['GET'])
 def pay_order(order_id):

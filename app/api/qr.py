@@ -1,54 +1,33 @@
-import io
-from urllib.parse import quote
-
-import segno
-from flask import Blueprint, send_file, abort
-
-from app.models import Order
+import os
+import base64
+from flask import Blueprint, jsonify, current_app
 
 qr_bp = Blueprint('api_qr', __name__)
 
-# Official PhonePe merchant VPA for Numero Annand AI Premium.
-UPI_ID = "7099805039-2@axl"
-PAYEE_NAME = "Ananda Sarmah"
-
-
-def _upi_uri(amount, note):
-    return (
-        "upi://pay?"
-        f"pa={UPI_ID}"
-        f"&pn={quote(PAYEE_NAME)}"
-        f"&am={amount}"
-        "&cu=INR"
-        f"&tn={quote(note)}"
-    )
-
-
-def _png_response(uri):
-    qr = segno.make(uri, error="m")
-    buf = io.BytesIO()
-    # Standard dark-on-light QR for maximum scanner compatibility.
-    qr.save(buf, kind="png", scale=9, border=3, dark="#000000", light="#ffffff")
-    buf.seek(0)
-    return send_file(buf, mimetype="image/png")
-
-
-@qr_bp.route('/api/qr/<int:order_id>.png', methods=['GET'])
-def order_qr(order_id):
-    """Generate an amount-specific UPI QR for a given order."""
-    order = Order.query.get_or_404(order_id)
-    note = f"Numero Premium Order #{order.id}"
-    return _png_response(_upi_uri(order.amount, note))
-
-
-@qr_bp.route('/api/qr.png', methods=['GET'])
-def generic_qr():
-    """Generic UPI QR (no fixed amount) for the merchant VPA."""
-    uri = (
-        "upi://pay?"
-        f"pa={UPI_ID}"
-        f"&pn={quote(PAYEE_NAME)}"
-        "&cu=INR"
-        f"&tn={quote('Numero Annand AI Premium')}"
-    )
-    return _png_response(uri)
+@qr_bp.route('/api/qr', methods=['GET'])
+def get_payment_qr():
+    try:
+        # Calculate the absolute location of your uploaded image file on Vercel
+        static_dir = current_app.static_folder
+        image_path = os.path.join(static_dir, 'images', 'payment_qr.png')
+        
+        # Safe structural check to prevent missing file layout errors
+        if not os.path.exists(image_path):
+            return jsonify({
+                "status": "error", 
+                "message": "Target original payment_qr.png asset file not found in static/images/ directory."
+            }), 404
+            
+        # Read your exact binary image data and convert it safely to a web stream layout
+        with open(image_path, "rb") as image_file:
+            base64_data = base64.b64encode(image_file.read()).decode('utf-8')
+            
+        return jsonify({
+            "status": "success",
+            "data": {
+                "qr_image_base64": f"data:image/png;base64,{base64_data}"
+            }
+        }), 200
+        
+    except Exception:
+        return jsonify({"status": "error", "message": "Failed to compile image metadata stream."}), 500
