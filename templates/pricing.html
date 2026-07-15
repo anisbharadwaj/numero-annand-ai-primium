@@ -1,28 +1,43 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<div class="text-center py-5">
-    <h2 class="display-5 text-gradient-gold fw-bold">Select Report Strategy Variant</h2>
-    <p class="text-muted">Choose your execution vector to initialize profiles mapping.</p>
-</div>
-
-<div class="row justify-content-center g-4 max-width-1000 mx-auto">
-    <!-- Digital Variant Product Option -->
-    <div class="col-md-5">
-        <div class="glass-panel p-4 text-center border-top border-info border-3 h-100 d-flex flex-column">
-            <h3 class="h4 mb-2">Digital PDF Analytics</h3>
-            <div class="display-4 my-3 text-white fw-bold">₹201</div>
-            <p class="text-muted small flex-grow-1">Instant delivery directly to verified electronic inbox infrastructure containing foundational calculations blueprints layers.</p>
-            <a href="{{ url_for('payments.checkout_route', plan_type='digital') }}" class="btn btn-outline-info w-100 py-2 mt-4">Order Digital Payload</a>
+<div class="container py-5 text-center">
+    <h2 class="text-gold display-5 fw-bold mb-5">Select Your Custom Analysis Tier</h2>
+    <div class="row justify-content-center g-4">
+        <div class="col-md-5">
+            <div class="glass-card p-5 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h3 class="fw-bold mb-3 text-white">Digital PDF Delivery</h3>
+                    <p class="text-muted">Instant delivery straight to your email inbox</p>
+                    <div class="my-4">
+                        <span class="display-4 fw-bold text-gold">₹201</span>
+                    </div>
+                    <ul class="text-start opacity-75 mb-4">
+                        <li>Complete AI Generation Analysis Profile</li>
+                        <li>PDF Format instant preservation download</li>
+                        <li>Lucky numbers, dates & color indicators</li>
+                    </ul>
+                </div>
+                <a href="{{ url_for('main.checkout', type='digital') }}" class="btn btn-gold w-100 py-3">Order Digital PDF Blueprint</a>
+            </div>
         </div>
-    </div>
-    
-    <!-- Printed Premium Executive Product Option -->
-    <div class="col-md-5">
-        <div class="glass-panel p-4 text-center border-top border-warning border-3 h-100 d-flex flex-column">
-            <h3 class="h4 mb-2 text-gradient-gold">Printed Premium Edition</h3>
-            <div class="display-4 my-3 text-gradient-gold fw-bold">₹501</div>
-            <p class="text-muted small flex-grow-1">High-grade leatherette/textured layout material printed physically and dispatched via express courier to local address frameworks.</p>
-            <a href="{{ url_for('payments.checkout_route', plan_type='printed') }}" class="btn btn-gold w-100 py-2 mt-4">Order Physical Edition</a>
+        <div class="col-md-5">
+            <div class="glass-card p-5 h-100 d-flex flex-column justify-content-between border border-warning">
+                <div>
+                    <div class="badge bg-warning text-dark mb-3 px-3 py-2 fw-bold text-uppercase">Most Requested</div>
+                    <h3 class="fw-bold mb-3 text-white">Printed Premium Report</h3>
+                    <p class="text-muted">Premium physical generation bound book delivered safely</p>
+                    <div class="my-4">
+                        <span class="display-4 fw-bold text-gold">₹501</span>
+                    </div>
+                    <ul class="text-start opacity-75 mb-4">
+                        <li>Everything contained within the comprehensive Digital report tier</li>
+                        <li>Physical high-end printed portfolio execution framework</li>
+                        <li>Priority processing timeline under manual review</li>
+                        <li>Free express shipping to any domestic shipping desk</li>
+                    </ul>
+                </div>
+                <a href="{{ url_for('main.checkout', type='printed') }}" class="btn btn-gold w-100 py-3">Order Premium Printed Book</a>
+            </div>
         </div>
     </div>
 </div>
