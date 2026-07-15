@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6 glass-panel p-4 text-center">
+        <h3 class="text-gradient-gold mb-3">Dynamic UPI Clearing Engine</h3>
+        <p class="text-muted small">Scan via any authorized interface app (BHIM, GooglePay, PhonePe, Paytm)</p>
+        
+        <div class="bg-white p-3 d-inline-block rounded-4 my-3 shadow-lg">
+            <!-- Intercepts dynamic endpoint built by python backend library on runtime -->
+            <img src="{{ url_for('api.generate_upi_qr', order_ref=order.order_ref) }}" alt="Dynamic Execution Token Code" class="img-fluid" style="max-width: 250px;">
+        </div>
+        
+        <div class="my-2 text-white font-monospace border border-secondary p-2 rounded bg-dark small">
+            Amount Due: <strong>₹{{ order.amount }}.00</strong><br>
+            Reference Allocation Token: <strong>{{ order.order_ref }}</strong>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="text-start mt-4 border-top border-secondary pt-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="mb-3">
+                <label class="form-label text-muted small">Enter 12-Digit Bank UTR / Transaction ID Reference</label>
+                <input type="text" name="utr" class="form-control custom-input font-monospace"
