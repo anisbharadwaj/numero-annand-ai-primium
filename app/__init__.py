@@ -1,34 +1,56 @@
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
-from config import Config
+from flask_login import LoginManager
+from werkzeug.security import generate_password_hash
+from app.models import db, AdminUser
 
-db = SQLAlchemy()
-login_manager = LoginManager()
 csrf = CSRFProtect()
+login_manager = LoginManager()
 
 def create_app():
-    app = Flask(__name__, 
-                template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'),
-                static_folder=os.path.join(os.path.dirname(__file__), '..', 'static'))
-    app.config.from_object(Config)
+    app = Flask(__name__, template_folder='../templates', static_folder='../static')
+    
+    # Production Grade Configuration Values
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///numero_annand.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Handle PostgreSQL standard syntax translation patch safely for Vercel deployment stacks
+    if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
+        app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
 
+    # Initialize Extension Modules
     db.init_app(app)
-    login_manager.init_app(app)
     csrf.init_app(app)
-
-    login_manager.login_view = "main.login"
-    login_manager.login_message_category = "info"
-
-    # Register blueprints inline to avoid circular dependencies
-    from app.main.routes import main_bp
-    app.register_blueprint(main_bp)
+    login_manager.init_app(app)
+    
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message_category = 'warning'
 
     @login_manager.user_loader
     def load_user(user_id):
-        from app.models import Admin
-        return Admin.query.get(int(user_id))
+        return AdminUser.query.get(int(user_id))
+
+    # Register Structural Architecture Blueprint Routing Channels
+    from app.main.routes import main_bp
+    from app.auth.routes import auth_bp
+    from app.payments.routes import payments_bp
+    from app.api.qr import qr_bp
+
+    app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(payments_bp)
+    app.register_blueprint(qr_bp)
+
+    # Automatically provision localized relational database tables and default administrator seeds
+    with app.app_context():
+        db.create_all()
+        # Seed an admin profile if none exists
+        if not AdminUser.query.filter_by(username='admin').first():
+            hashed_pwd = generate_password_hash('AnnandSarmaAI2026')
+            master_admin = AdminUser(username='admin', password_hash=hashed_pwd)
+            db.session.add(master_admin)
+            db.session.commit()
 
     return app
