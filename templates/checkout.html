@@ -1,64 +1,100 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<div class="row justify-content-center py-4">
-    <div class="col-md-8 glass-panel p-4">
-        <h3 class="mb-4 text-gradient-gold">Profile Deployment Formulation Matrix</h3>
-        <span class="badge bg-dark mb-4 border border-secondary text-info p-2">Target Profile Matrix: {{ report_label }} (₹{{ amount }})</span>
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="glass-card p-4">
+                <h3 class="text-gold mb-4">Step 1: Complete Cosmic Geometry Information Matrix</h3>
+                <form action="{{ url_for('main.process_checkout') }}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="report_type" value="{{ report_type }}">
+                    
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control" required placeholder="John Doe">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" name="dob" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Exact Birth Time</label>
+                            <input type="time" name="birth_time" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Birth Place (City, State, Country)</label>
+                            <input type="text" name="birth_place" class="form-control" required placeholder="Guwahati, Assam, India">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mobile WhatsApp Contact</label>
+                            <input type="tel" name="mobile" class="form-control" required placeholder="9876543210">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email Delivery Address</label>
+                            <input type="email" name="email" class="form-control" required placeholder="name@domain.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Gender Alignment</label>
+                            <select name="gender" class="form-select" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Preferred Report Language</label>
+                            <select name="language" class="form-select" required>
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Assamese">Assamese</option>
+                            </select>
+                        </div>
+                        
+                        {% if report_type == 'printed' %}
+                        <div class="col-md-12">
+                            <label class="form-label">Complete Shipping Postal Address</label>
+                            <textarea name="address" class="form-control" rows="3" required placeholder="Enter full address with PIN code where physical ledger should be mailed..."></textarea>
+                        </div>
+                        {% endif %}
+
+                        <h3 class="text-gold mt-4 mb-2">Step 2: Submit Instant UPI Payment</h3>
+                        <p class="text-muted small">Scan the dynamic ledger invoice to the right with any UPI app (GPay, PhonePe, Paytm). Complete exactly the transaction requirement, paste your transaction numeric reference string down below, and attach a screenshot proof for real-time audit processing.</p>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-warning">Transaction Reference Number (UTR / Ref No.)</label>
+                            <input type="text" name="utr" class="form-control border-warning" required placeholder="12-digit numeric value matching transaction receipt">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Attach Verification Screenshot Receipt File</label>
+                            <input type="file" name="screenshot" class="form-control" accept="image/*" required>
+                        </div>
+                        
+                        <div class="col-md-12 mt-4">
+                            <button type="submit" class="btn btn-gold w-100 py-3 fs-5 fw-bold">Submit Completed Record Request Ledger</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         
-        <form method="POST" action="{{ url_for('payments.checkout_route', plan_type=plan_type) }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Full Legal Name</label>
-                    <input type="text" name="name" class="form-control custom-input" required autocomplete="off">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Date of Birth</label>
-                    <input type="date" name="dob" class="form-control custom-input" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Time of Birth (e.g. 14:35)</label>
-                    <input type="text" name="birth_time" class="form-control custom-input" placeholder="HH:MM" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Place of Birth (City, State)</label>
-                    <input type="text" name="birth_place" class="form-control custom-input" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Mobile Network Identification Vector</label>
-                    <input type="tel" name="mobile" class="form-control custom-input" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Target Email Destination Endpoint</label>
-                    <input type="email" name="email" class="form-control custom-input" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Gender Manifestation</label>
-                    <select name="gender" class="form-select custom-input" required>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Language Parsing Protocol</label>
-                    <select name="language" class="form-select custom-input" required>
-                        <option value="English">English</option>
-                        <option value="Hindi">Hindi</option>
-                        <option value="Assamese">Assamese</option>
-                    </select>
+        <div class="col-lg-5">
+            <div class="glass-card p-4 text-center sticky-top" style="top: 100px;">
+                <h4 class="text-white mb-3">Dynamic Secured Payment Counter</h4>
+                <div class="badge bg-dark border border-secondary text-gold p-2 mb-3 fs-6">Selected Tier: {{ report_type.upper() }}</div>
+                <div class="display-5 fw-bold text-white mb-4">₹{{ amount }}.00</div>
+                
+                <div class="bg-white p-3 rounded-3 d-inline-block shadow-lg mb-3">
+                    <!-- Hits the python api dynamically parsing the precise locked calculation requirement -->
+                    <img src="{{ url_for('main.generate_upi_qr', amount=amount) }}" alt="Secure UPI Processing Gate Matrix" class="img-fluid" style="max-width: 260px;">
                 </div>
                 
-                {% if plan_type == 'printed' %}
-                <div class="col-12">
-                    <label class="form-label text-muted small">Physical Delivery Structural Destination Address</label>
-                    <textarea name="address" class="form-control custom-input" rows="3" required placeholder="Complete physical postal parameters..."></textarea>
+                <div class="text-dark bg-warning p-2 rounded-2 small fw-bold mb-3">
+                    Official Verified Target: 7099805039@ybl
                 </div>
-                {% endif %}
+                <p class="text-muted small text-start px-2">This processing node maps an un-truncable direct link to legal merchant account ledger **Ananda Sarmah**. Scan dynamically directly from inside this transaction display pipeline to immediately populate accurate invoice parameters.</p>
             </div>
-            
-            <button type="submit" class="btn btn-gold w-100 py-3 mt-4 text-uppercase">Proceed to Clear Payment Gateway</button>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}
