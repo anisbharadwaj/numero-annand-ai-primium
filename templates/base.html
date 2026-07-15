@@ -3,78 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numero Annand AI Premium</title>
+    <title>{% block title %}Numero Annand AI Premium{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Animate.css for Premium Animations -->
+    <link href="https://cloudflare.com" rel="stylesheet">
+    
+    <!-- Global Premium Dark Glassmorphism Styles -->
     <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-gold: #d4af37;
+        }
+        
         body {
-            background: linear-gradient(135deg, #0f0c20 0%, #15102a 50%, #060214 100%);
-            color: #f1f1f6;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(13, 110, 253, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(106, 17, 203, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
             min-height: 100vh;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-        .glass-nav {
-            background: rgba(15, 12, 32, 0.7);
+
+        .glass-navbar {
+            background: rgba(10, 14, 26, 0.75) !important;
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
         }
+
+        .glass-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid var(--glass-border) !important;
+        }
+
         .text-gold {
-            color: #dfb76c !important;
-            text-shadow: 0 0 10px rgba(223, 183, 108, 0.3);
+            color: var(--accent-gold) !important;
         }
+
         .btn-gold {
-            background: linear-gradient(135deg, #dfb76c 0%, #b89149 100%);
-            color: #0d0a1a !important;
-            font-weight: 600;
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
             border: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            color: #000;
+            font-weight: 600;
         }
+
         .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(223, 183, 108, 0.4);
+            background: linear-gradient(135deg, #e5c158 0%, #c5921a 100%);
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
-        .form-control, .form-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-        .form-control:focus, .form-select:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: #dfb76c;
-            color: #fff;
-            box-shadow: none;
+
+        footer {
+            background: rgba(5, 7, 13, 0.9);
+            border-top: 1px solid var(--glass-border);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark glass-nav sticky-top">
+
+    <!-- Responsive Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
         <div class="container">
-            <a class="navbar-brand text-gold fw-bold" href="{{ url_for('main.index') }}">🔮 Numero Annand AI Premium</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link text-light me-3" href="{{ url_for('main.pricing') }}">Pricing Plans</a>
-                {% if current_user.is_authenticated %}
-                    <a class="nav-link text-warning me-3" href="{{ url_for('main.dashboard') }}">Dashboard</a>
-                    <a class="btn btn-sm btn-outline-danger" href="{{ url_for('main.logout') }}">Logout</a>
-                {% else %}
-                    <a class="nav-link text-light opacity-50" href="{{ url_for('main.login') }}">Admin Space</a>
-                {% endif %}
+            <a class="navbar-brand fw-bold tracking-wide d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-compass-fill text-gold animate__animated animate__spin animate__slow animate__infinite"></i>
+                <span>Numero Annand <span class="text-gold">AI Premium</span></span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2 text-center">
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/#faq">FAQ</a></li>
+                    <li class="nav-item">
+                        <a class="btn btn-gold btn-sm px-4 rounded-pill shadow-sm" href="/#pricing">Get Report</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container my-3">
+    <!-- System Flash Alerts Fragment Container -->
+    <div class="container mt-3">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} bg-dark text-light border-secondary alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{% if category == 'error' %}danger{% else %}{{ category }}{% endif %} bg-dark text-white border-secondary alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="bi {% if category == 'error' %}bi-exclamation-triangle-fill text-danger{% else %}bi-check-circle-fill text-success{% endif %} me-2"></i>
                         {{ message }}
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
                     </div>
@@ -83,12 +110,20 @@
         {% endwith %}
     </div>
 
-    {% block content %}{% endblock %}
+    <!-- Core Dynamic Structural Page Injections -->
+    <main class="container my-5">
+        {% block content %}{% endblock %}
+    </main>
 
-    <footer class="container text-center py-5 mt-5 border-top border-secondary opacity-50">
-        <p>&copy; 2026 Numero Annand AI Premium. All Rights Reserved. Managed Account of Ananda Sarmah.</p>
+    <!-- Global Application Footer Component -->
+    <footer class="text-white-50 py-4 mt-auto">
+        <div class="container text-center">
+            <p class="m-0 small">&copy; 2026 <strong>Numero Annand AI Premium</strong>. Developed for Brand Owner: <strong>Ananda Sarmah</strong>.</p>
+            <p class="text-muted small mt-1" style="font-size: 0.75rem;">Secure UPI Settlement via VPA 7099805039@ybl</p>
+        </div>
     </footer>
 
+    <!-- Bootstrap 5 JavaScript Bundle Bundle with Popper -->
     <script src="https://jsdelivr.net"></script>
 </body>
 </html>
