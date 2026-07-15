@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Numerology Blueprint - Numero Annand AI Premium{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate__animated animate__fadeIn">
+    <div class="col-lg-10 col-xl-9 col-sm-12">
+
+        <!-- Stage progress tracker -->
+        <div class="d-flex justify-content-between align-items-center mb-4 px-3 text-white-50 small font-monospace mx-auto" style="max-width: 520px;">
+            <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> 1. Details</span>
+            <span class="text-success">&rarr;</span>
+            <span class="text-primary fw-bold"><i class="bi bi-2-circle-fill me-1"></i> 2. Free Preview</span>
+            <span class="text-muted">&rarr;</span>
+            <span><i class="bi bi-3-circle me-1"></i> 3. Unlock Premium</span>
+        </div>
+
+        <div class="text-center mb-4">
+            <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-20 px-3 py-2 rounded-pill text-uppercase tracking-wider small fw-bold mb-2">Instant Preview Report</span>
+            <h2 class="fw-bold tracking-tight text-white mb-1">Numerology Blueprint for <span class="text-gold">{{ report.name }}</span></h2>
+            <p class="text-white-50 small mb-0">Date of Birth: <span class="font-monospace text-white">{{ report.dob_display }}</span></p>
+        </div>
+
+        <!-- Core numbers -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 rounded-4 text-center h-100 border border-white border-opacity-5">
+                    <div class="text-white-50 small text-uppercase tracking-wider font-monospace">Driver</div>
+                    <div class="display-5 fw-black text-gold">{{ report.driver }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 rounded-4 text-center h-100 border border-white border-opacity-5">
+                    <div class="text-white-50 small text-uppercase tracking-wider font-monospace">Conductor</div>
+                    <div class="display-5 fw-black text-gold">{{ report.conductor }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 rounded-4 text-center h-100 border border-white border-opacity-5">
+                    <div class="text-white-50 small text-uppercase tracking-wider font-monospace">Name Number</div>
+                    <div class="display-5 fw-black text-white">{{ report.name_single }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 rounded-4 text-center h-100 border border-white border-opacity-5">
+                    <div class="text-white-50 small text-uppercase tracking-wider font-monospace">Name Compound</div>
+                    <div class="display-5 fw-black text-white">{{ report.name_total }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lo Shu grid + energy score -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6 col-sm-12">
+                <div class="glass-card p-4 rounded-4 h-100 border border-white border-opacity-10">
+                    <h5 class="fw-bold text-white mb-3"><i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>Lo Shu Grid</h5>
+                    <table class="loshu-grid mx-auto">
+                        {% for row in report.grid_rows %}
+                        <tr>
+                            {% for cell in row %}
+                            <td class="{{ 'filled' if cell.present else 'empty' }}">
+                                {{ cell.value if cell.present else '-' }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <p class="text-white-50 small mt-3 mb-0 text-center">Repeated digits amplify a trait; blank cells reveal karmic lessons to develop.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="glass-card p-4 rounded-4 h-100 border border-white border-opacity-10 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold text-white mb-2"><i class="bi bi-activity text-gold me-2"></i>Name Energy Balance</h5>
+                    <p class="text-white-50 small mb-2">Synchronisation between your Driver, Destiny and Chaldean name resonance.</p>
+                    <div class="progress bg-black bg-opacity-25 rounded-pill" style="height: 22px;">
+                        <div class="progress-bar bg-gold-fill fw-bold text-dark" role="progressbar"
+                             style="width: {{ report.score }}%;"
+                             aria-valuenow="{{ report.score }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ report.score }}%
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-3">
+                        <div class="col-6">
+                            <div class="p-2 bg-white bg-opacity-5 rounded-3 text-center">
+                                <div class="text-white-50 small text-uppercase tracking-wider">Missing</div>
+                                <div class="text-danger fw-bold font-monospace">{{ report.missing | join(', ') if report.missing else 'None' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-white bg-opacity-5 rounded-3 text-center">
+                                <div class="text-white-50 small text-uppercase tracking-wider">Repeated</div>
+                                <div class="text-success fw-bold font-monospace">{{ report.repeated | join(', ') if report.repeated else 'None' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plane analysis -->
+        <div class="glass-card p-4 rounded-4 mb-4 border border-white border-opacity-10">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-diagram-3-fill text-primary me-2"></i>Plane &amp; Arrow Strengths</h5>
+            <div class="row g-3">
+                {% for plane in report.planes %}
+                <div class="col-md-4 col-sm-6">
+                    <div class="p-3 bg-white bg-opacity-5 rounded-3 h-100 border border-white border-opacity-5">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-semibold text-white small">{{ plane.label }}</span>
+                            <span class="badge {{ 'bg-success' if plane.complete else 'bg-secondary' }} bg-opacity-20 {{ 'text-success' if plane.complete else 'text-white-50' }} font-monospace">{{ plane.strength }}%</span>
+                        </div>
+                        <div class="progress bg-black bg-opacity-25" style="height: 6px;">
+                            <div class="progress-bar {{ 'bg-success' if plane.complete else 'bg-primary' }}" style="width: {{ plane.strength }}%;"></div>
+                        </div>
+                        <div class="text-white-50 mt-2 font-monospace" style="font-size: 0.72rem;">Numbers {{ plane.numbers | join('-') }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Name correction -->
+        <div class="glass-card p-4 rounded-4 mb-4 border border-white border-opacity-10">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-pencil-square text-gold me-2"></i>Name Correction &amp; Guidance</h5>
+            <div class="alert {{ 'alert-success' if report.name_analysis.perfect else 'alert-warning' }} bg-dark border-opacity-25">
+                {{ report.name_analysis.message }}
+            </div>
+            {% if report.name_analysis.suggestions %}
+            <p class="text-white-50 small mb-2 mt-3 fw-semibold text-uppercase tracking-wider">Suggested optimised spellings</p>
+            <div class="row g-3">
+                {% for s in report.name_analysis.suggestions %}
+                <div class="col-md-4 col-sm-12">
+                    <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 h-100">
+                        <h6 class="text-gold fw-bold mb-2">{{ s.name }}</h6>
+                        <p class="small text-white-50 mb-1">Improved Compatibility: <span class="text-white fw-bold">{{ s.score }}%</span></p>
+                        <p class="small text-white-50 mb-2">New Vibration: <span class="text-white fw-bold">{{ s.number }}</span></p>
+                        <p class="text-muted" style="font-size: 0.75rem;">{{ s.reason }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Lucky indicators -->
+        <div class="glass-card p-4 rounded-4 mb-4 border border-white border-opacity-10">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-stars text-gold me-2"></i>Lucky Indicators</h5>
+            <div class="row g-3 small">
+                <div class="col-md-4 col-sm-12">
+                    <span class="text-white-50 text-uppercase tracking-wider d-block mb-1">Lucky Numbers</span>
+                    <span class="text-white font-monospace fw-bold">{{ report.lucky_numbers | join(', ') }}</span>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <span class="text-white-50 text-uppercase tracking-wider d-block mb-1">Lucky Days</span>
+                    <span class="text-white">{{ report.lucky_days | join(', ') }}</span>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <span class="text-white-50 text-uppercase tracking-wider d-block mb-1">Lucky Colors</span>
+                    <span class="text-white">{{ report.lucky_colors | join(', ') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium unlock CTA -->
+        <div class="glass-card p-4 p-md-5 rounded-4 border border-primary border-opacity-30 text-center shadow-lg" style="background: rgba(13,110,253,0.03) !important;">
+            <i class="bi bi-lock-fill text-gold display-5 mb-2"></i>
+            <h3 class="fw-bold text-white mb-2">Unlock Your Complete Premium Report</h3>
+            <p class="text-white-50 mx-auto mb-4" style="max-width: 560px;">
+                This is your free preview. The full blueprint adds a 25+ page psychological &amp; spiritual profile,
+                12-month Mahadasha forecast, detailed remedies, career and relationship deep-dives and a
+                professionally formatted PDF{% if order.report_type == 'premium' %} plus a printed home-delivered edition{% endif %}.
+            </p>
+            <div class="d-inline-flex align-items-baseline gap-2 mb-4">
+                <span class="text-white-50">Selected tier:</span>
+                <span class="badge bg-gold-fill text-dark text-uppercase font-monospace px-3 py-2">{{ order.report_type }} &mdash; &#8377;{{ order.amount }}</span>
+            </div>
+            <div class="d-grid d-sm-flex justify-content-center gap-3">
+                <a href="{{ url_for('payments.pay_order', order_id=order.id) }}" class="btn btn-gold btn-lg px-5 py-3 rounded-3 fw-bold shadow d-flex align-items-center justify-content-center gap-2">
+                    <span>Pay &#8377;{{ order.amount }} &amp; Unlock</span>
+                    <i class="bi bi-unlock-fill"></i>
+                </a>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-3 text-white border-white border-opacity-20">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .loshu-grid {
+        border-collapse: separate;
+        border-spacing: 8px;
+    }
+    .loshu-grid td {
+        width: 72px;
+        height: 72px;
+        text-align: center;
+        vertical-align: middle;
+        border-radius: 12px;
+        font-family: 'Courier New', monospace;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+    .loshu-grid td.filled {
+        background: rgba(212, 175, 55, 0.14);
+        border: 1px solid rgba(212, 175, 55, 0.5);
+        color: var(--accent-gold);
+    }
+    .loshu-grid td.empty {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.25);
+    }
+    .bg-gold-fill {
+        background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
+    }
+</style>
+{% endblock %}
