@@ -7,9 +7,9 @@ csrf = CSRFProtect()
 login_manager = LoginManager()
 
 def create_app():
-    # Enforce clear absolute task mapping paths for serverless nodes
-    # Vercel places applications in '/var/task'. If it is missing, it falls back to local.
-    root_dir = os.environ.get('LAMBDA_TASK_ROOT', os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    # Calculate clear absolute workspace dimensions matching Vercel's environment
+    base_dir = os.path.dirname(os.path.abspath(__file__)) # Location of app/
+    root_dir = os.path.dirname(base_dir)                  # Location of project root/
     
     template_path = os.path.join(root_dir, 'templates')
     static_path = os.path.join(root_dir, 'static')
@@ -18,7 +18,7 @@ def create_app():
     
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
     
-    # In-memory ephemeral DB prevents read-only platform crashes
+    # In-memory ephemeral DB prevents read-only container platform blockages
     database_url = os.environ.get('DATABASE_URL')
     if not database_url:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
