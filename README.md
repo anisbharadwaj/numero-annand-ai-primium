@@ -1,21 +1,24 @@
-# Study Dashboard Flask App
+# Numero Annand AI Premium
 
-This repository contains a Flask web application with educational resources and a project deployment dashboard.
+AI-powered Premium Numerology Platform by **Annand Sarma**
 
 ## Features
+- Lo Shu Grid, Vedic, Chaldean, Pythagorean Numerology
+- AI Report Generation with PDF
+- Dynamic UPI QR Code Payment
+- Admin & Customer Dashboards
+- Multi-language AI Chatbot
+- Secure Authentication & Session Management
 
-- **StudyIQ Learning Center:** Embed YouTube playlists, searchable study resources, bookmarks.
-- **Project Dashboard:** Monitor Vercel deployments (status, logs), system metrics (CPU, memory via `psutil`), alerts.
-- **QR Payment System:** Generate UPI QR codes (server and JS fallback), with PNG download and UPI ID copy.
-- **Security:** User authentication, 2FA (TOTP via PyOTP), CSRF protection, HTTPS enforcement, secure cookies.
-- **Error Handling:** Custom 404/500 pages, clear error messages, integration with Sentry for exception reporting.
-- **UI/UX:** Bootstrap 5 responsive design, sidebar navigation, dark mode toggle.
-- **Future-Proofing:** Modular structure (Blueprints), SQLite with SQLAlchemy/migrations, structured logging, and monitoring.
+## Tech Stack
+- Backend: Flask, SQLAlchemy, JWT
+- Frontend: React, Tailwind CSS, Framer Motion
+- Database: SQLite / PostgreSQL
+- Payment: UPI QR (Dynamic)
+- Reports: ReportLab
 
-## Setup (Local)
-
-1. **Clone** this repo.
-2. **Create a Python virtualenv** and activate it.
-3. **Install requirements:**
-   ```bash
-   pip install -r requirements.txt
+## Setup
+1. Clone the repo
+2. Copy `.env.example` to `.env`
+3. `pip install -r requirements.txt`
+4. `python run.py`
