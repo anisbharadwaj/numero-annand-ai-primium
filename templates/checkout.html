@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numero Annand AI Premium - Secure Checkout</title>
+    <title>Numero Annand AI Premium - Complete Purchase Gateway</title>
     
-    <!-- Core UI Frameworks -->
+    <!-- Bootstrap 5 and Core CSS Frameworks -->
     <link href="https://jsdelivr.net" rel="stylesheet">
     <link href="https://jsdelivr.net" rel="stylesheet">
     <link href="https://cloudflare.com" rel="stylesheet">
     
-    <!-- Premium Dark Glassmorphism Styling System -->
+    <!-- Premium Dark Glassmorphism Structural Design Styling -->
     <style>
         :root {
             --bg-dark: #0a0e1a;
@@ -75,8 +75,8 @@
             color: #ffffff !important;
         }
 
-        /* Solid White Container for the QR Code image to avoid screen glare and scanning drop-outs */
-        .qr-white-holder {
+        /* High-Contrast White Background Wrapper to isolate original QR colors cleanly */
+        .qr-display-card {
             background-color: #ffffff !important;
             padding: 1rem;
             border-radius: 1rem;
@@ -86,22 +86,18 @@
             width: 100%;
         }
 
-        .qr-white-holder img {
+        .qr-display-card img {
             display: block;
             width: 100%;
             height: auto;
             mix-blend-mode: normal !important;
-            filter: none !important;
-        }
-
-        .cursor-pointer {
-            cursor: pointer;
+            filter: none !important; /* Disables page dark filters from corrupting original QR pixels */
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Bar Header -->
+    <!-- Top Navigation Header -->
     <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
@@ -111,51 +107,45 @@
         </div>
     </nav>
 
-    <!-- Main Form Interface Layout -->
+    <!-- Content Workspace -->
     <div class="container my-5">
         <div class="row g-4 justify-content-center">
             <div class="col-lg-10 col-xl-9 col-sm-12">
                 
-                <!-- Gateway Header Title Section -->
                 <div class="text-center mb-4">
                     <h2 class="fw-bold tracking-tight text-white mb-1"><i class="bi bi-shield-check text-gold me-2"></i>Order Gateway — Get Your Complete Premium Report</h2>
                     <p class="text-white-50">Unlock your fully personalized, beautifully formatted extensive master blueprint edition.</p>
                 </div>
 
-                <!-- Database Order Post Form Pipeline Routing Links -->
+                <!-- Main Form Pipeline Ingestion Routing -->
                 <form method="POST" action="/create-order" enctype="multipart/form-data" class="needs-validation" novalidate>
-                    <!-- Form Protection Security Anchor (Handled via Flask-WTF context tokens) -->
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined }}"/>
 
                     <div class="row g-4">
                         
-                        <!-- Left Panel: User Profile Birth Data Intake Menu -->
+                        <!-- Left Data Intake Column Block -->
                         <div class="col-md-6 col-sm-12">
                             <div class="glass-card p-4 rounded-4 h-100">
                                 <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Workspace Menu</h5>
                                 
-                                <!-- Name Input -->
                                 <div class="mb-3">
                                     <label for="name" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Name For Analysis</label>
-                                    <input type="text" class="form-control py-2.5" id="name" name="name" placeholder="Enter Full Name" required>
+                                    <input type="text" class="form-control py-2.5" id="name" name="name" placeholder="Annand Sarma" required>
                                     <div class="invalid-feedback">Full client analysis identity data profile path is required.</div>
                                 </div>
 
-                                <!-- Date of Birth Datepicker Input -->
                                 <div class="mb-3">
                                     <label for="birth_date" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Date Of Birth</label>
                                     <input type="date" class="form-control py-2.5" id="birth_date" name="birth_date" required>
                                     <div class="invalid-feedback">Please configure standard chronological calendar criteria input metrics.</div>
                                 </div>
 
-                                <!-- Mobile Field Component -->
                                 <div class="mb-3">
                                     <label for="mobile" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Mobile Number (Optional)</label>
-                                    <input type="tel" class="form-control py-2.5" id="mobile" name="mobile" placeholder="e.g. 7099805039" pattern="[0-9]{10}">
+                                    <input type="tel" class="form-control py-2.5" id="mobile" name="mobile" placeholder="7099805039" pattern="[0-9]{10}">
                                     <div class="invalid-feedback">Provide a standard 10-digit primary telephone data structure vector.</div>
                                 </div>
 
-                                <!-- Output Language Preference Selector Dropdown Menu -->
                                 <div class="mb-3">
                                     <label for="language" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Select Analysis Language</label>
                                     <select class="form-select py-2.5" id="language" name="language" required>
@@ -165,7 +155,7 @@
                                     </select>
                                 </div>
 
-                                <!-- Fallback Hidden Context Metrics Mapping Columns To Prevent Database Layout Crashes -->
+                                <!-- Hidden context parameters mapping back to prevent database structural record crashes -->
                                 <input type="hidden" name="email" value="customer@numeroannand.ai">
                                 <input type="hidden" name="gender" value="Male">
                                 <input type="hidden" name="birth_time" value="12:00">
@@ -173,15 +163,21 @@
                             </div>
                         </div>
 
-                        <!-- Right Panel: Dynamic Tier Pricing Menu + Real Image Frame + Proof Processing -->
+                        <!-- Right Panel: Dynamic Pricing Tier Options Menus -->
                         <div class="col-md-6 col-sm-12">
                             <div class="glass-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between">
                                 
                                 <div>
                                     <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Step 1: Choose Your Premium Delivery Format</h5>
                                     
-                                    <!-- Digital Format Checklist Tier Option Component -->
                                     <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 mb-3">
                                         <div class="form-check">
-                                            <input class="form-check-input border-secondary cursor-pointer" type="radio" name="report_tier_selector" id="tierDigital" value="digital" checked onclick="togglePricingTier('digital', 201)">
+                                            <input class="form-check-input border-secondary" type="radio" name="report_tier_selector" id="tierDigital" value="digital" checked onclick="togglePricingTier('digital', 201)">
                                             <label class="form-check-label fw-bold cursor-pointer text-white" for="tierDigital">
+                                                Download Full Digital PDF Version (Instant AI) — <span class="text-gold">₹201</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 mb-4">
+                                        <div class="form-check">
