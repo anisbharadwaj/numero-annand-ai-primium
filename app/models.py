@@ -1,68 +1,39 @@
-from app import db, login_manager
+from datetime import datetime
+from app import db
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-import pyotp
 
-class User(UserMixin, db.Model):
-    """User account (with 2FA)."""
+class User(UserMixin):
+    def __init__(self, id, username):
+        self.id = id
+        self.username = username
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    # TOTP secret for 2FA (base32 string)
-    totp_secret = db.Column(db.String(16), nullable=False, default=pyotp.random_base32)
+    name = db.Column(db.String(100), nullable=False)
+    dob = db.Column(db.String(20), nullable=False)
+    birth_time = db.Column(db.String(20), nullable=False)
+    birth_place = db.Column(db.String(150), nullable=False)
+    mobile = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    gender = db.Column(db.String(20), nullable=False)
+    language = db.Column(db.String(30), nullable=False)
+    report_type = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.Text, nullable=True)
+    amount = db.Column(db.Integer, nullable=False)
+    payment_status = db.Column(db.String(20), default='Pending')  # Pending, Verified, Rejected
+    utr = db.Column(db.String(50), nullable=True, unique=True)
+    screenshot_base64 = db.Column(db.Text, nullable=True)  # Base64 string for direct Vercel database handling
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def get_totp_uri(self):
-        """Return provisioning URI for Google Authenticator."""
-        return pyotp.totp.TOTP(self.totp_secret).provisioning_uri(name=self.email, issuer_name="StudyDashboard")
-
-    def verify_totp(self, token):
-        """Verify a time-based OTP."""
-        totp = pyotp.TOTP(self.totp_secret)
-        return totp.verify(token, valid_window=1)  # allow 1 step clock skew
-
-    def __repr__(self):
-        return f"<User {self.email}>"
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-class StudyResource(db.Model):
-    """Educational content item (YouTube playlist, note, etc.)."""
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
-    category = db.Column(db.String(100))
-    url = db.Column(db.String(300), nullable=False)
-
-    def __repr__(self):
-        return f"<StudyResource {self.title}>"
-
-class Deployment(db.Model):
-    """Records of deployments fetched from Vercel."""
-    id = db.Column(db.Integer, primary_key=True)
-    vercel_id = db.Column(db.String(100), nullable=False)
-    url = db.Column(db.String(300))
-    date = db.Column(db.DateTime)
-    status = db.Column(db.String(50))
-    duration = db.Column(db.Float)
-    commit = db.Column(db.String(40))
-
-class LogEntry(db.Model):
-    """Application log entry (from file or generated)."""
-    id = db.Column(db.Integer, primary_key=True)
-    level = db.Column(db.String(10))
-    message = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime)
-
-class Alert(db.Model):
-    """Anomaly or conflict alert."""
-    id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(50))
-    description = db.Column(db.String(200))
-    timestamp = db.Column(db.DateTime)
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "report_type": self.report_type,
+            "amount": self.amount,
+            "payment_status": self.payment_status,
+            "utr": self.utr,
+            "created_at": self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
