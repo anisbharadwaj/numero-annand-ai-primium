@@ -45,11 +45,13 @@ def create_app():
     from app.auth.routes import auth_bp
     from app.payments.routes import payments_bp
     from app.api.qr import qr_bp
+    from app.api.ai_chat import ai_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(payments_bp)
     app.register_blueprint(qr_bp)
+    app.register_blueprint(ai_bp)
 
     try:
         with app.app_context():
