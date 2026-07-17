@@ -61,12 +61,20 @@ def create_app():
     from app.payments.routes import payments_bp
     from app.api.qr import qr_bp
     from app.api.ai_chat import ai_bp
+    from app.admin.routes import admin_bp
+    from app.admin.cms import cms_bp
+    from app.admin.backup import backup_bp
+    from app.admin.users import users_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(payments_bp)
     app.register_blueprint(qr_bp)
     app.register_blueprint(ai_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(cms_bp)
+    app.register_blueprint(backup_bp)
+    app.register_blueprint(users_bp)
 
     try:
         with app.app_context():
