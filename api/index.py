@@ -1,9 +1,11 @@
 import sys
 import os
+
+# Add parent directory to path so we can import 'app' module
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app import app as flask_app
+# Import and create the Flask application
+from app import create_app
 
-def handler(request, response):
-    """Vercel serverless handler"""
-    return flask_app(request, response)
+# Create the app instance - Vercel looks for a top-level 'app' variable
+app = create_app()
