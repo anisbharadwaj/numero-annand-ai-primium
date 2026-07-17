@@ -85,7 +85,8 @@ def create_app():
                 master_admin = AdminUser(username='admin', password_hash=hashed_pwd)
                 db.session.add(master_admin)
                 db.session.commit()
-    except Exception:
-        pass
+    except Exception as e:
+        # Log initialization errors but don't fail - they may be expected in serverless environments
+        print(f"[v0] Warning: Database initialization error: {str(e)}", flush=True)
 
     return app
