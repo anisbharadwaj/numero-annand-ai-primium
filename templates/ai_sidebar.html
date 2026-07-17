@@ -1,0 +1,675 @@
+<!-- Annand AI Assistant Sidebar - Glassmorphism Design -->
+<div id="ai-sidebar" class="ai-sidebar">
+    <!-- Header -->
+    <div class="ai-header">
+        <div class="ai-header-content">
+            <div class="ai-avatar">
+                <img src="{{ url_for('static', filename='images/founder_annand.jpg') }}" alt="Annand Sarma" class="founder-img">
+                <span class="ai-status-indicator"></span>
+            </div>
+            <div class="ai-header-text">
+                <h3 class="ai-title">Annand AI</h3>
+                <p class="ai-subtitle">Your Numerology Guide</p>
+                <div class="ai-message-limit">
+                    <span id="message-remaining" class="remaining-count">5</span> messages left
+                </div>
+            </div>
+        </div>
+        <div class="ai-controls">
+            <button id="ai-minimize" class="ai-btn-icon" title="Minimize">
+                <i class="bi bi-dash"></i>
+            </button>
+            <button id="ai-close" class="ai-btn-icon" title="Close">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat History -->
+    <div id="ai-messages" class="ai-messages">
+        <div class="ai-welcome">
+            <div class="ai-welcome-icon">✨</div>
+            <h4>Namaste!</h4>
+            <p>I'm Annand AI, your personal numerology assistant. Ask me anything about our services, numerology, pricing, or how to get your custom numerology report!</p>
+            
+            <!-- Suggested Questions -->
+            <div class="ai-suggestions">
+                <button class="ai-suggestion-btn" data-question="What is numerology?">
+                    <i class="bi bi-chat-dots"></i> What is numerology?
+                </button>
+                <button class="ai-suggestion-btn" data-question="Tell me about your reports">
+                    <i class="bi bi-chat-dots"></i> Tell me about your reports
+                </button>
+                <button class="ai-suggestion-btn" data-question="What's the premium subscription?">
+                    <i class="bi bi-chat-dots"></i> Premium subscription?
+                </button>
+                <button class="ai-suggestion-btn" data-question="How does payment work?">
+                    <i class="bi bi-chat-dots"></i> How does payment work?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="ai-input-area">
+        <div class="ai-input-wrapper">
+            <input 
+                id="ai-message-input" 
+                type="text" 
+                class="ai-input" 
+                placeholder="Ask me anything..." 
+                maxlength="500"
+            >
+            <button id="ai-send-btn" class="ai-send-btn" title="Send message">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+        <div class="ai-input-footer">
+            <select id="ai-language" class="ai-language-select">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="as">অসমীয়া</option>
+            </select>
+            <button id="ai-clear-chat" class="ai-footer-btn" title="Clear chat">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toggle Button (when minimized) -->
+<button id="ai-toggle-btn" class="ai-toggle-btn" style="display: none;">
+    <div class="ai-toggle-content">
+        <img src="{{ url_for('static', filename='images/founder_annand.jpg') }}" alt="Annand AI" class="ai-toggle-img">
+        <span class="ai-toggle-label">Annand AI</span>
+    </div>
+</button>
+
+<style>
+    :root {
+        --ai-primary: #8b5cf6;      /* Purple */
+        --ai-accent: #fbbf24;       /* Gold */
+        --ai-dark: #0f172a;         /* Dark background */
+        --ai-glass: rgba(15, 23, 42, 0.7);
+        --ai-border: rgba(139, 92, 246, 0.2);
+    }
+
+    /* Sidebar Container */
+    .ai-sidebar {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 380px;
+        max-height: 600px;
+        background: linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--ai-border);
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
+        display: flex;
+        flex-direction: column;
+        z-index: 9998;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Header */
+    .ai-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--ai-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .ai-header-content {
+        display: flex;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .ai-avatar {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .founder-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 2px solid var(--ai-accent);
+    }
+
+    .ai-status-indicator {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 12px;
+        height: 12px;
+        background: #10b981;
+        border: 2px solid var(--ai-dark);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
+
+    .ai-header-text {
+        flex: 1;
+    }
+
+    .ai-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ai-accent);
+    }
+
+    .ai-subtitle {
+        margin: 2px 0 6px 0;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .ai-message-limit {
+        font-size: 11px;
+        color: #cbd5e1;
+    }
+
+    .remaining-count {
+        color: var(--ai-accent);
+        font-weight: 600;
+    }
+
+    .ai-controls {
+        display: flex;
+        gap: 8px;
+    }
+
+    .ai-btn-icon {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--ai-border);
+        background: rgba(139, 92, 246, 0.1);
+        color: var(--ai-accent);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .ai-btn-icon:hover {
+        background: rgba(139, 92, 246, 0.2);
+        transform: scale(1.05);
+    }
+
+    /* Messages Container */
+    .ai-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ai-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .ai-messages::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .ai-messages::-webkit-scrollbar-thumb {
+        background: rgba(139, 92, 246, 0.3);
+        border-radius: 3px;
+    }
+
+    /* Welcome Section */
+    .ai-welcome {
+        text-align: center;
+    }
+
+    .ai-welcome-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+
+    .ai-welcome h4 {
+        margin: 0 0 8px 0;
+        color: var(--ai-accent);
+        font-size: 18px;
+    }
+
+    .ai-welcome p {
+        margin: 0 0 16px 0;
+        color: #cbd5e1;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /* Suggestions */
+    .ai-suggestions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .ai-suggestion-btn {
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .ai-suggestion-btn:hover {
+        background: rgba(139, 92, 246, 0.25);
+        border-color: rgba(139, 92, 246, 0.5);
+        transform: translateX(4px);
+    }
+
+    /* Chat Messages */
+    .ai-message {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .ai-message.user {
+        justify-content: flex-end;
+    }
+
+    .ai-message.ai {
+        justify-content: flex-start;
+    }
+
+    .ai-message-content {
+        max-width: 85%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .ai-message.user .ai-message-content {
+        background: rgba(139, 92, 246, 0.3);
+        color: #e2e8f0;
+        border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .ai-message.ai .ai-message-content {
+        background: rgba(251, 191, 36, 0.1);
+        color: #fef3c7;
+        border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+
+    .ai-typing {
+        display: flex;
+        gap: 4px;
+        padding: 10px 12px;
+    }
+
+    .ai-typing span {
+        width: 6px;
+        height: 6px;
+        background: var(--ai-accent);
+        border-radius: 50%;
+        animation: typing 1.4s infinite;
+    }
+
+    .ai-typing span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .ai-typing span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+        30% { opacity: 1; transform: translateY(-8px); }
+    }
+
+    /* Input Area */
+    .ai-input-area {
+        padding: 12px;
+        border-top: 1px solid var(--ai-border);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ai-input-wrapper {
+        display: flex;
+        gap: 8px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid var(--ai-border);
+        border-radius: 12px;
+        padding: 8px;
+    }
+
+    .ai-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #e2e8f0;
+        font-size: 13px;
+        outline: none;
+        padding: 4px;
+    }
+
+    .ai-input::placeholder {
+        color: #64748b;
+    }
+
+    .ai-send-btn {
+        background: var(--ai-accent);
+        border: none;
+        color: #1e1b4b;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .ai-send-btn:hover {
+        background: #fcd34d;
+        transform: scale(1.05);
+    }
+
+    .ai-send-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Footer Controls */
+    .ai-input-footer {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .ai-language-select {
+        flex: 1;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid var(--ai-border);
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .ai-language-select option {
+        background: var(--ai-dark);
+        color: #e2e8f0;
+    }
+
+    .ai-footer-btn {
+        background: transparent;
+        border: 1px solid var(--ai-border);
+        color: #94a3b8;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .ai-footer-btn:hover {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--ai-accent);
+    }
+
+    /* Toggle Button (Minimized) */
+    .ai-toggle-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-accent) 100%);
+        border: 2px solid var(--ai-accent);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9997;
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        transition: all 0.3s;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    .ai-toggle-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+    }
+
+    .ai-toggle-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .ai-toggle-img {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 2px solid white;
+    }
+
+    .ai-toggle-label {
+        font-size: 8px;
+        color: white;
+        font-weight: 600;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+        .ai-sidebar {
+            width: calc(100vw - 20px);
+            max-height: 70vh;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .ai-message-content {
+            max-width: 95%;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('ai-sidebar');
+    const toggleBtn = document.getElementById('ai-toggle-btn');
+    const minimizeBtn = document.getElementById('ai-minimize');
+    const closeBtn = document.getElementById('ai-close');
+    const sendBtn = document.getElementById('ai-send-btn');
+    const clearBtn = document.getElementById('ai-clear-chat');
+    const messageInput = document.getElementById('ai-message-input');
+    const messagesContainer = document.getElementById('ai-messages');
+    const languageSelect = document.getElementById('ai-language');
+    const suggestionBtns = document.querySelectorAll('.ai-suggestion-btn');
+
+    let isMinimized = false;
+
+    // Handle minimize
+    minimizeBtn.addEventListener('click', function() {
+        isMinimized = true;
+        sidebar.style.display = 'none';
+        toggleBtn.style.display = 'flex';
+    });
+
+    // Handle toggle
+    toggleBtn.addEventListener('click', function() {
+        isMinimized = false;
+        sidebar.style.display = 'flex';
+        toggleBtn.style.display = 'none';
+    });
+
+    // Handle close
+    closeBtn.addEventListener('click', function() {
+        sidebar.style.display = 'none';
+        toggleBtn.style.display = 'none';
+    });
+
+    // Handle send message
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        // Add user message to UI
+        addMessageToUI(message, 'user');
+        messageInput.value = '';
+
+        // Show typing indicator
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'ai-message ai';
+        typingDiv.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Send to API
+        fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                language: languageSelect.value,
+                user_id: null  // Can be set if user is logged in
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            typingDiv.remove();
+            addMessageToUI(data.response, 'ai');
+            
+            // Update message limit display
+            const remaining = data.remaining_messages;
+            document.getElementById('message-remaining').textContent = remaining === 'unlimited' ? '∞' : remaining;
+        })
+        .catch(error => {
+            typingDiv.remove();
+            addMessageToUI('Sorry, I encountered an error. Please try again.', 'ai');
+        });
+    }
+
+    function addMessageToUI(message, type) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `ai-message ${type}`;
+        msgDiv.innerHTML = `<div class="ai-message-content">${escapeHtml(message)}</div>`;
+        messagesContainer.appendChild(msgDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Handle clear chat
+    clearBtn.addEventListener('click', function() {
+        messagesContainer.innerHTML = `
+            <div class="ai-welcome">
+                <div class="ai-welcome-icon">✨</div>
+                <h4>Chat Cleared</h4>
+                <p>Start a new conversation!</p>
+            </div>
+        `;
+    });
+
+    // Handle suggestion buttons
+    suggestionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            messageInput.value = this.dataset.question;
+            sendMessage();
+        });
+    });
+
+    // Language persistence
+    languageSelect.addEventListener('change', function() {
+        localStorage.setItem('ai-language', this.value);
+    });
+
+    // Restore language preference
+    const savedLanguage = localStorage.getItem('ai-language');
+    if (savedLanguage) {
+        languageSelect.value = savedLanguage;
+    }
+});
+</script>

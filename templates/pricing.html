@@ -1,44 +1,150 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container py-5 text-center">
-    <h2 class="text-gold display-5 fw-bold mb-5">Select Your Custom Analysis Tier</h2>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="text-gold display-5 fw-bold mb-3">Numerology Reports & Premium Subscription</h2>
+        <p class="text-muted fs-5">Choose the plan that best fits your spiritual journey</p>
+    </div>
+
     <div class="row justify-content-center g-4">
-        <div class="col-md-5">
+        <!-- One-time Digital Report -->
+        <div class="col-lg-4">
             <div class="glass-card p-5 h-100 d-flex flex-column justify-content-between">
                 <div>
-                    <h3 class="fw-bold mb-3 text-white">Digital PDF Delivery</h3>
-                    <p class="text-muted">Instant delivery straight to your email inbox</p>
+                    <h3 class="fw-bold mb-3 text-white">Digital Report</h3>
+                    <p class="text-muted small">One-time purchase</p>
                     <div class="my-4">
                         <span class="display-4 fw-bold text-gold">₹201</span>
+                        <span class="text-muted small">/one-time</span>
                     </div>
-                    <ul class="text-start opacity-75 mb-4">
-                        <li>Complete AI Generation Analysis Profile</li>
-                        <li>PDF Format instant preservation download</li>
-                        <li>Lucky numbers, dates & color indicators</li>
+                    <ul class="text-start opacity-75 mb-4 small">
+                        <li>✓ Instant PDF delivery to email</li>
+                        <li>✓ Complete numerology analysis</li>
+                        <li>✓ Lo Shu Grid calculations</li>
+                        <li>✓ Lucky numbers & dates</li>
+                        <li>✓ Career & health guidance</li>
+                        <li>✓ Lifetime access</li>
                     </ul>
                 </div>
-                <a href="{{ url_for('main.checkout', type='digital') }}" class="btn btn-gold w-100 py-3">Order Digital PDF Blueprint</a>
+                <a href="{{ url_for('main.checkout', type='digital') }}" class="btn btn-gold w-100 py-3 fw-bold">Get Digital Report</a>
             </div>
         </div>
-        <div class="col-md-5">
+
+        <!-- One-time Printed Report -->
+        <div class="col-lg-4">
             <div class="glass-card p-5 h-100 d-flex flex-column justify-content-between border border-warning">
                 <div>
-                    <div class="badge bg-warning text-dark mb-3 px-3 py-2 fw-bold text-uppercase">Most Requested</div>
-                    <h3 class="fw-bold mb-3 text-white">Printed Premium Report</h3>
-                    <p class="text-muted">Premium physical generation bound book delivered safely</p>
+                    <div class="badge bg-warning text-dark mb-3 px-3 py-2 fw-bold text-uppercase">Most Popular</div>
+                    <h3 class="fw-bold mb-3 text-white">Printed Report</h3>
+                    <p class="text-muted small">One-time purchase with shipping</p>
                     <div class="my-4">
                         <span class="display-4 fw-bold text-gold">₹501</span>
+                        <span class="text-muted small">/one-time</span>
                     </div>
-                    <ul class="text-start opacity-75 mb-4">
-                        <li>Everything contained within the comprehensive Digital report tier</li>
-                        <li>Physical high-end printed portfolio execution framework</li>
-                        <li>Priority processing timeline under manual review</li>
-                        <li>Free express shipping to any domestic shipping desk</li>
+                    <ul class="text-start opacity-75 mb-4 small">
+                        <li>✓ Everything in Digital Report</li>
+                        <li>✓ Premium hardbound book</li>
+                        <li>✓ Full-color printing</li>
+                        <li>✓ Founder's verification seal</li>
+                        <li>✓ Free express shipping</li>
+                        <li>✓ Physical keepsake</li>
                     </ul>
                 </div>
-                <a href="{{ url_for('main.checkout', type='printed') }}" class="btn btn-gold w-100 py-3">Order Premium Printed Book</a>
+                <a href="{{ url_for('main.checkout', type='printed') }}" class="btn btn-gold w-100 py-3 fw-bold">Order Printed Book</a>
+            </div>
+        </div>
+
+        <!-- Premium Monthly Subscription -->
+        <div class="col-lg-4">
+            <div class="glass-card p-5 h-100 d-flex flex-column justify-content-between border" style="border-color: #8b5cf6 !important; border-width: 2px;">
+                <div>
+                    <div class="badge mb-3 px-3 py-2 fw-bold text-uppercase" style="background: linear-gradient(135deg, #8b5cf6, #fbbf24); color: #0a0e1a;">✨ Premium Tier</div>
+                    <h3 class="fw-bold mb-3 text-white">Premium Subscription</h3>
+                    <p class="text-muted small">Unlimited access & AI assistance</p>
+                    <div class="my-4">
+                        <span class="display-4 fw-bold text-gold">₹500</span>
+                        <span class="text-muted small">/month</span>
+                    </div>
+                    <ul class="text-start opacity-75 mb-4 small">
+                        <li>✓ Unlimited AI assistant messages</li>
+                        <li>✓ Priority report generation</li>
+                        <li>✓ Monthly consultation booking</li>
+                        <li>✓ Exclusive numerology tips daily</li>
+                        <li>✓ Early access to new features</li>
+                        <li>✓ Dedicated support</li>
+                        <li>✓ Auto-renewal (cancel anytime)</li>
+                    </ul>
+                </div>
+                <button class="btn w-100 py-3 fw-bold" style="background: linear-gradient(135deg, #8b5cf6, #fbbf24); color: #0a0e1a; border: none;" onclick="alert('Premium subscription coming soon! Contact us for early access.')">Subscribe Now</button>
             </div>
         </div>
     </div>
+
+    <!-- Feature Comparison -->
+    <div class="row mt-5 pt-5 border-top border-secondary">
+        <div class="col-12">
+            <h4 class="text-gold fw-bold mb-4">Feature Comparison</h4>
+        </div>
+        <div class="col-12 table-responsive">
+            <table class="table table-dark glass-card" style="border: 1px solid rgba(255,255,255,0.08);">
+                <thead>
+                    <tr class="border-bottom" style="border-color: rgba(255,255,255,0.08) !important;">
+                        <th class="text-gold">Feature</th>
+                        <th class="text-center text-muted">Digital</th>
+                        <th class="text-center text-muted">Printed</th>
+                        <th class="text-center text-gold">Premium</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-color: rgba(255,255,255,0.08) !important;">
+                        <td>Numerology Report</td>
+                        <td class="text-center">✓</td>
+                        <td class="text-center">✓</td>
+                        <td class="text-center text-gold">✓</td>
+                    </tr>
+                    <tr style="border-color: rgba(255,255,255,0.08) !important;">
+                        <td>AI Messages (daily)</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center text-gold">Unlimited</td>
+                    </tr>
+                    <tr style="border-color: rgba(255,255,255,0.08) !important;">
+                        <td>Consultation Booking</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center text-gold">✓</td>
+                    </tr>
+                    <tr style="border-color: rgba(255,255,255,0.08) !important;">
+                        <td>Daily Tips & Guidance</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center text-gold">✓</td>
+                    </tr>
+                    <tr style="border-color: rgba(255,255,255,0.08) !important;">
+                        <td>Priority Support</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center text-gold">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+<style>
+    .btn-gold {
+        background-color: #d4af37;
+        color: #0a0e1a;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s;
+    }
+    .btn-gold:hover {
+        background-color: #fbbf24;
+        color: #0a0e1a;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    }
+</style>
 {% endblock %}
