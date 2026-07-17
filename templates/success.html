@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Placed Successfully - Numero Annand AI Premium{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center animate__animated animate__fadeIn" style="min-height: 70vh;">
+    <div class="col-md-7 col-sm-12 text-center">
+        
+        <!-- Order Stage Progress Breadcrumb -->
+        <div class="d-flex justify-content-between align-items-center mb-5 px-4 text-white-50 small font-monospace mx-auto" style="max-width: 500px;">
+            <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> 1. Form Details</span>
+            <span class="text-success">➔</span>
+            <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> 2. UPI Payment</span>
+            <span class="text-success">➔</span>
+            <span class="text-primary fw-bold"><i class="bi bi-3-circle-fill me-1"></i> 3. Complete</span>
+        </div>
+
+        <!-- Glassmorphism Success Card Wrapper -->
+        <div class="glass-card p-5 rounded-4 shadow-lg border border-white border-opacity-10 text-white position-relative overflow-hidden">
+            
+            <!-- Confetti / Success Radial Glow Backdrop Layer -->
+            <div class="position-absolute top-0 start-50 translate-middle bg-success rounded-circle filter-blur opacity-10" style="width: 250px; height: 250px; filter: blur(50px);"></div>
+
+            <!-- Success Animated Check Badge -->
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-20 rounded-circle mb-4 animate__animated animate__bounceIn" style="width: 80px; height: 80px;">
+                <i class="bi bi-shield-check text-success display-4"></i>
+            </div>
+
+            <h2 class="fw-bold tracking-tight mb-2">Verification Request Received</h2>
+            <p class="text-white-50 max-w-sm mx-auto mb-4">
+                Thank you, <strong class="text-white">{{ order.name }}</strong>! Your transaction proof has been successfully logged into our financial matching queue.
+            </p>
+
+            <!-- Order Information Tracking Summary Box -->
+            <div class="p-4 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 text-start font-monospace mb-4">
+                <div class="row g-2 small">
+                    <div class="col-5 text-white-50 text-uppercase tracking-wider">Order Reference:</div>
+                    <div class="col-7 text-white fw-bold">#{{ order.id }}</div>
+                    
+                    <div class="col-5 text-white-50 text-uppercase tracking-wider">Assigned VPA:</div>
+                    <div class="col-7 text-gold">7099805039@ybl</div>
+
+                    <div class="col-5 text-white-50 text-uppercase tracking-wider">Submitted UTR:</div>
+                    <div class="col-7 text-white text-break">{{ order.utr }}</div>
+
+                    <div class="col-5 text-white-50 text-uppercase tracking-wider">Package Tier:</div>
+                    <div class="col-7 text-white text-uppercase text-gold">{{ order.report_type }}</div>
+
+                    <div class="col-5 text-white-50 text-uppercase tracking-wider">Settlement:</div>
+                    <div class="col-7"><span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-20 px-2 py-1">Awaiting Admin Verification</span></div>
+                </div>
+            </div>
+
+            <!-- Processing Timeline Disclaimer Callout -->
+            <div class="d-flex align-items-start gap-3 p-3 bg-primary bg-opacity-10 border border-primary border-opacity-10 rounded-3 text-start mb-4 small text-white-50">
+                <i class="bi bi-info-circle-fill text-primary fs-5 mt-0.5"></i>
+                <div>
+                    Our verification office verifies matching transaction references within <strong class="text-white">24 operational hours</strong>. Digital charts are delivered straight to <span class="text-white font-monospace">{{ order.email }}</span>. Physical binders are forwarded directly to cross-country transit routing immediately following approval.
+                </div>
+            </div>
+
+            <!-- Home Dashboard Pathways Redirect CTA Link -->
+            <div class="d-grid d-sm-flex justify-content-sm-center gap-3">
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline-light px-4 py-2.5 rounded-3 text-white border-white border-opacity-20 hover-bg-glass text-decoration-none small transition-all">
+                    <i class="bi bi-house-door me-1"></i> Return to Homepage
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-bg-glass:hover {
+        background-color: rgba(255, 255, 255, 0.06) !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+    }
+</style>
+{% endblock %}

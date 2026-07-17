@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numero Annand AI Premium - Complete Purchase Gateway</title>
+    
+    <!-- UI Layout Vector Core Packages -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://cloudflare.com" rel="stylesheet">
+    
+    <!-- Premium Dark Glassmorphism Styling Sheet Configuration -->
+    <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-gold: #d4af37;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(13, 110, 253, 0.12) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(106, 17, 203, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .glass-navbar {
+            background: rgba(10, 14, 26, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .glass-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid var(--glass-border) !important;
+        }
+
+        .text-gold {
+            color: var(--accent-gold) !important;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+            border: none;
+            color: #000;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e5c158 0%, #c5921a 100%);
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border-color: var(--accent-gold) !important;
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.15) !important;
+            color: #ffffff !important;
+        }
+
+        /* Solid White Canvas Wrapper Frame to ensure perfect phone-camera scanning contrast balance */
+        .qr-canvas-holder {
+            background-color: #ffffff !important;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+            display: inline-block;
+            max-width: 250px;
+            width: 100%;
+        }
+
+        .qr-canvas-holder img {
+            display: block;
+            width: 100%;
+            height: auto;
+            mix-blend-mode: normal !important;
+            /* Inverts your black settings image to standard dark pixels on a white grid layout dynamically */
+            filter: invert(1) contrast(1.2) brightness(0.95) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Responsive Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-compass-fill text-gold animate__animated animate__spin animate__slow animate__infinite"></i>
+                <span>Numero Annand <span class="text-gold">AI Premium</span></span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content Gateway Workspace -->
+    <div class="container my-5">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-10 col-xl-9 col-sm-12">
+                
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold tracking-tight text-white mb-1"><i class="bi bi-shield-check text-gold me-2"></i>Order Gateway — Get Your Complete Premium Report</h2>
+                    <p class="text-white-50">Unlock your fully personalized, beautifully formatted extensive master blueprint edition.</p>
+                </div>
+
+                <!-- Database Form Pipeline Integration -->
+                <form method="POST" action="/create-order" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined }}"/>
+
+                    <div class="row g-4">
+                        
+                        <!-- Left Data Intake Fields Form Group -->
+                        <div class="col-md-6 col-sm-12">
+                            <div class="glass-card p-4 rounded-4 h-100">
+                                <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Workspace Menu</h5>
+                                
+                                <div class="mb-3">
+                                    <label for="name" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Name For Analysis</label>
+                                    <input type="text" class="form-control py-2.5" id="name" name="name" placeholder="Annand Sarma" required>
+                                    <div class="invalid-feedback">Full client analysis identity data profile path is required.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="birth_date" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Date Of Birth</label>
+                                    <input type="date" class="form-control py-2.5" id="birth_date" name="birth_date" required>
+                                    <div class="invalid-feedback">Please configure standard chronological calendar criteria input metrics.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="mobile" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Mobile Number (Optional)</label>
+                                    <input type="tel" class="form-control py-2.5" id="mobile" name="mobile" placeholder="7099805039" pattern="[0-9]{10}">
+                                    <div class="invalid-feedback">Provide a standard 10-digit primary telephone data structure vector.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="language" class="form-label small fw-semibold text-white-50 text-uppercase font-monospace">Select Analysis Language</label>
+                                    <select class="form-select py-2.5" id="language" name="language" required>
+                                        <option value="English" selected>English Output Model</option>
+                                        <option value="Hindi">Hindi Presentation Version</option>
+                                        <option value="Assamese">Assamese Regional Blueprint Variant</option>
+                                    </select>
+                                </div>
+
+                                <!-- Hidden form parameter fallbacks to avoid schema validation errors -->
+                                <input type="hidden" name="email" value="customer@numeroannand.ai">
+                                <input type="hidden" name="gender" value="Male">
+                                <input type="hidden" name="birth_time" value="12:00">
+                                <input type="hidden" name="birth_place" value="Assam, India">
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Core Pricing and Image Pipeline Rendering Area -->
+                        <div class="col-md-6 col-sm-12">
+                            <div class="glass-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between">
+                                
+                                <div>
+                                    <h5 class="fw-bold text-white mb-4 border-bottom border-white border-opacity-10 pb-2">Step 1: Choose Your Premium Delivery Format</h5>
+                                    
+                                    <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input border-secondary cursor-pointer" type="radio" name="report_tier_selector" id="tierDigital" value="digital" checked onclick="togglePricingTier('digital', 201)">
+                                            <label class="form-check-label fw-bold cursor-pointer text-white" for="tierDigital">
+                                                Download Full Digital PDF Version (Instant AI) — <span class="text-gold">₹201</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 bg-white bg-opacity-5 rounded-3 border border-white border-opacity-5 mb-4">
+                                        <div class="form-check">

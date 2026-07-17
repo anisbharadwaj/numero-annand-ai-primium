@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Login - Numero Annand AI Premium{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="col-md-5 col-sm-12">
+        <!-- Glassmorphism Card Wrapper -->
+        <div class="glass-card p-5 rounded-4 shadow-lg border border-1 border-opacity-10 border-white text-white">
+            
+            <!-- Header Section -->
+            <div class="text-center mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-20 rounded-circle mb-3 animate__animated animate__fadeInDown" style="width: 70px; height: 70px;">
+                    <i class="bi bi-shield-lock-fill fs-2 text-primary"></i>
+                </div>
+                <h2 class="fw-bold tracking-wide m-0">Admin Portal</h2>
+                <p class="text-white-50 small mt-1">Authorized Access Only</p>
+            </div>
+
+            <!-- Login Form -->
+            <form method="POST" action="{{ url_for('auth.login') }}" class="needs-validation" novalidate>
+                <!-- CSRF Token (Crucial for Flask-WTF Security Compliance) -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Username Input Group -->
+                <div class="mb-4">
+                    <label for="username" class="form-label small fw-semibold uppercase tracking-wider text-white-50">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-white-50 border-secondary">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                        <input type="text" 
+                               class="form-control bg-transparent border-start-0 text-white border-secondary placeholder-white-50 ps-0 focus-ring" 
+                               id="username" 
+                               name="username" 
+                               placeholder="Enter admin username" 
+                               required 
+                               autocomplete="username">
+                        <div class="invalid-feedback">Please enter your username.</div>
+                    </div>
+                </div>
+
+                <!-- Password Input Group -->
+                <div class="mb-4">
+                    <label for="password" class="form-label small fw-semibold uppercase tracking-wider text-white-50">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-white-50 border-secondary">
+                            <i class="bi bi-lock-fill"></i>
+                        </span>
+                        <input type="password" 
+                               class="form-control bg-transparent border-start-0 text-white border-secondary placeholder-white-50 ps-0 focus-ring" 
+                               id="password" 
+                               name="password" 
+                               placeholder="Enter secure password" 
+                               required 
+                               autocomplete="current-password">
+                        <div class="invalid-feedback">Please enter your password.</div>
+                    </div>
+                </div>
+
+                <!-- Remember Me Toggle Switch -->
+                <div class="mb-4 form-check form-switch d-flex align-items-center">
+                    <input class="form-check-input bg-transparent border-secondary focus-ring-sm me-2" type="checkbox" id="remember_me" name="remember_me">
+                    <label class="form-check-label text-white-50 small cursor-pointer" for="remember_me">Keep me logged in</label>
+                </div>
+
+                <!-- Submission Button -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-3 fw-bold shadow-sm transition-all d-flex align-items-center justify-content-center gap-2">
+                        <span>Secure Sign In</span>
+                        <i class="bi bi-arrow-right-short fs-4"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Return Link -->
+            <div class="text-center mt-4">
+                <a href="{{ url_for('main.index') }}" class="text-white-50 text-decoration-none small transition-all hover-white">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Live Website
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Custom Embedded Styles for Forms & Focus States to preserve clean execution architecture -->
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(16px) saturate(120%) !important;
+        -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+    }
+    .placeholder-white-50::placeholder {
+        color: rgba(255, 255, 255, 0.35) !important;
+    }
+    .form-control:focus, .form-check-input:focus {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #fff !important;
+        border-color: var(--bs-primary) !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+    }
+    .input-group:focus-within .input-group-text {
+        border-color: var(--bs-primary) !important;
+        color: var(--bs-primary) !important;
+    }
+    .hover-white:hover {
+        color: #ffffff !important;
+        text-shadow: 0 0 8px rgba(255,255,255,0.3);
+    }
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+
+<!-- Standard Client-side Form Validation Engine -->
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}

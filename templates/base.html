@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Numero Annand AI Premium{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Animate.css for Premium Animations -->
+    <link href="https://cloudflare.com" rel="stylesheet">
+    
+    <!-- Global Premium Dark Glassmorphism Styles -->
+    <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-gold: #d4af37;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(13, 110, 253, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(106, 17, 203, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .glass-navbar {
+            background: rgba(10, 14, 26, 0.75) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .glass-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+            border: 1px solid var(--glass-border) !important;
+        }
+
+        .text-gold {
+            color: var(--accent-gold) !important;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+            border: none;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e5c158 0%, #c5921a 100%);
+            color: #000;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        footer {
+            background: rgba(5, 7, 13, 0.9);
+            border-top: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Responsive Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold tracking-wide d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-compass-fill text-gold animate__animated animate__spin animate__slow animate__infinite"></i>
+                <span>Numero Annand <span class="text-gold">AI Premium</span></span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2 text-center">
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/#faq">FAQ</a></li>
+                    <li class="nav-item">
+                        <a class="btn btn-gold btn-sm px-4 rounded-pill shadow-sm" href="/#pricing">Get Report</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- System Flash Alerts Fragment Container -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{% if category == 'error' %}danger{% else %}{{ category }}{% endif %} bg-dark text-white border-secondary alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="bi {% if category == 'error' %}bi-exclamation-triangle-fill text-danger{% else %}bi-check-circle-fill text-success{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Core Dynamic Structural Page Injections -->
+    <main class="container my-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Application Footer Component -->
+    <footer class="text-white-50 py-4 mt-auto">
+        <div class="container text-center">
+            <p class="m-0 small">&copy; 2026 <strong>Numero Annand AI Premium</strong>. Developed for Brand Owner: <strong>Ananda Sarmah</strong>.</p>
+            <p class="text-muted small mt-1" style="font-size: 0.75rem;">Secure UPI Settlement via VPA 7099805039-2@axl</p>
+        </div>
+    </footer>
+
+    <!-- Annand AI Sidebar Assistant (on all pages) -->
+    {% include 'ai_sidebar.html' %}
+
+    <!-- Bootstrap 5 JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
