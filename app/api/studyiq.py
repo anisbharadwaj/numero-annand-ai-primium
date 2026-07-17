@@ -1,12 +1,13 @@
-from flask import Blueprint, jsonify
-from app.models import StudyResource
+"""StudyIQ - Numerology Analysis API endpoint for Vercel"""
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-api_studyiq_bp = Blueprint('api_studyiq', __name__, url_prefix='/api/studyiq')
-
-@api_studyiq_bp.route('/resources')
-def get_resources():
-    """Return all study resources as JSON."""
-    resources = StudyResource.query.all()
-    data = [{'id': r.id, 'title': r.title, 'url': r.url, 'category': r.category}
-            for r in resources]
-    return jsonify(resources=data)
+def handler(request):
+    """Vercel serverless function for numerology analysis"""
+    from flask import jsonify
+    from studyiq.routes import analyze_numerology
+    
+    data = request.get_json() or {}
+    result = analyze_numerology(data)
+    return jsonify(result)

@@ -17,23 +17,38 @@ def create_app():
     app = Flask(__name__, template_folder=template_path, static_folder=static_path)
     
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secure-premium-key-928130')
-    
-    # In-memory ephemeral DB prevents read-only container platform blockages
-    database_url = os.environ.get('DATABASE_URL')
+    app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB max payment-proof upload
+
+    # Prefer the Neon Postgres connection string. Vercel/Neon expose several
+    # aliases; try them in order so orders persist in a real database.
+    database_url = (
+        os.environ.get('DATABASE_URL')
+        or os.environ.get('POSTGRES_URL')
+        or os.environ.get('POSTGRES_URL_NON_POOLING')
+        or os.environ.get('DATABASE_URL_UNPOOLED')
+    )
     if not database_url:
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        # Local dev fallback only. On Vercel the Neon env vars are always present.
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///numero_annand.db'
     else:
+        # SQLAlchemy + psycopg2 needs the "postgresql://" scheme.
         if database_url.startswith("postgres://"):
             database_url = database_url.replace("postgres://", "postgresql://", 1)
         app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-        
+        # Serverless Postgres connections can be dropped between invocations;
+        # pre-ping recycles dead connections instead of erroring.
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+            'pool_pre_ping': True,
+            'pool_recycle': 300,
+        }
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     from app.models import db, AdminUser
     db.init_app(app)
     csrf.init_app(app)
     login_manager.init_app(app)
-    
+
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = 'warning'
 
